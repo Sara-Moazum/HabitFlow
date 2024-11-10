@@ -1,0 +1,41 @@
+/* Main container for the About Us section */
+.about-us-section {
+    background: linear-gradient(125deg, #000 70% , #a965ff); /* Black to dark purple gradient */
+    color: #fff; /* White text */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1366px;
+    height: 569px;
+  }
+  
+  /* Header styling */
+  .about-us-section h2 {
+    font-size: 2rem;
+    color: #a965ff; /* Light purple for the heading text */
+    margin-bottom: 10px;
+  }
+  
+  /* Divider line */
+  .divider {
+    width: 300px;
+    border: 0;
+    border-top: 2px solid #c79eff; /* Light purple color for the line */
+    margin: 10px 0 20px 0;
+  }
+  
+  /* Paragraph styling */
+  .about-us-section p {
+    font-size: 1rem;
+    max-width: 600px;
+    line-height: 1.6;
+    color: #ccc; /* Light gray color for the paragraph text */
+    margin-bottom: 15px;
+    text-align: left; /* Center align the text */
+    margin-left: auto;  /* Optional: Center the paragraph itself */
+    margin-right: auto; /* Optional: Center the paragraph itself */
+}
+
+  
