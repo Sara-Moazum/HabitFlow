@@ -1,18 +1,18 @@
-// Import necessary React and CSS dependencies
 import React from 'react';
-import './NavBar.css'; // Import a separate CSS file for styling
+import './NavBar.css'; 
+import { Link } from "react-router-dom";
 
-// Login Component
 function NavBar() {
   return (
    
     <header className="navbar">
       <div className="logo">HABITFLOW</div>
       <nav className="nav-links">
-        <a href="#home">Home</a>
-        <a href="#login">Login</a>
-        <a href="#contact">Contact</a>
-        <a href="#about">About Us</a>
+        <Link to="/">Home</Link>
+        <Link to="/">Login</Link>
+        <Link to="/contactUs">Contact</Link>
+        <Link to="/about">About Us</Link>
+
       </nav>
     </header>
       

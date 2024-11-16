@@ -1,15 +1,34 @@
+import { Routes, Route } from 'react-router-dom'
 import AboutUs from "./components/AboutUs";
-// import Login from "./components/Login";
+import Login from "./components/Login";
 import NavBar from "./components/NavBar";
+import SignUp from './components/SignUp';
+import ContactUs from './components/ContactUs';
+import CreateHabit from './components/CreateHabit';
+import SetGoals from './components/SetGoals';
+import UpdateHabit from './components/UpdateHabit';
+import DeleteHabit from './components/DeleteHabit';
 
 
 function App() {
   return (
-    <div className="App">
-      <NavBar/>
-       {/* <Login/>  */}
-       <AboutUs/>
-    </div>
+      <>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/createHabit" element={<CreateHabit/>} />
+          <Route path="/setGoals" element={<SetGoals/>} />
+          <Route path="/updateHabit" element={<UpdateHabit/>} />
+          <Route path="/deleteHabit" element={<DeleteHabit/>} />
+
+
+
+        </Routes>
+        </>
+    
   );
 }
 
