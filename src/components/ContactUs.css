@@ -1,9 +1,11 @@
 .outerDiv{
-    /* background-color: #161515; */
+    background-color: #161515; 
     /* border: 2px solid red; */
     display: flex;
     margin:40px 25px;
     font-family: sans-serif;
+    width:100%;
+    min-height: 100vh;
 }
 
 .leftDiv{

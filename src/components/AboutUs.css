@@ -7,8 +7,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 1366px;
-    height: 569px;
+    width:100%;
+    min-height:100vh;
   }
   
   /* Header styling */

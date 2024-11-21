@@ -1,0 +1,11 @@
+npm install --save-dev @types/express  (error under express)
+npm install jwt-decode@2.0.0
+npm install react-icons
+npm install axios
+npm install react react-dom
+npm install bcrypt
+npm install jsonwebtoken
+
+
+export NODE_OPTIONS=--openssl-legacy-provider
+npm start
