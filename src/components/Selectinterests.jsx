@@ -58,7 +58,6 @@ const SelectInterests = () => {
                 </button>
             </main>
 
-            <footer className="footer">HABITFLOW © 2024, All Rights Reserved</footer>
         </div>
     );
 };
