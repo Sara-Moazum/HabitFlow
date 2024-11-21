@@ -1,6 +1,6 @@
 /* Main container for the About Us section */
 .about-us-section {
-    background: linear-gradient(125deg, #000 70% , #a965ff); /* Black to dark purple gradient */
+    background: linear-gradient(125deg, #000 70% , #a965ff); 
     color: #fff; /* White text */
     text-align: center;
     display: flex;
@@ -10,11 +10,10 @@
     width:100%;
     min-height:100vh;
   }
-  
-  /* Header styling */
+
   .about-us-section h2 {
     font-size: 2rem;
-    color: #a965ff; /* Light purple for the heading text */
+    color: #a965ff; 
     margin-bottom: 10px;
   }
   

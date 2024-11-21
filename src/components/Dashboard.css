@@ -2,7 +2,7 @@
 .dashboard-container {
     font-family: Arial, sans-serif;
     color: #D9D9D9; /* Text color */
-    background-color: #151515;
+    background-color: #161515;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
