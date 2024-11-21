@@ -1,0 +1,134 @@
+/* General Layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    line-height: 1.5;
+}
+
+h1,
+h2 {
+    text-align: center;
+    color: 615D66;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #1e1e1e;
+}
+
+.header {
+    background-color: #181818;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: #a065ff;
+    font-weight: bold;
+}
+
+.navLinks {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+}
+
+/* Main Content */
+.interestsPage {
+    flex: 1;
+    padding: 3rem 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.highlight {
+    color: #a065ff;
+    font-weight: bold;
+}
+
+.interestsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Default: 3 items per row */
+    gap: 1.5rem;
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.interestBtn {
+    padding: 1rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background-color: #444;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .interestBtn:hover {
+        background-color: #666;
+    }
+
+.selectedBtn {
+    background-color: #a065ff;
+}
+
+.saveBtn {
+    margin-top: 1rem;
+    padding: 0.8rem 2.5rem;
+    border: none;
+    border-radius: 20px;
+    background-color: #615D66;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+/* Footer */
+.footer {
+    background-color: #181818;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .interestsGrid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Tablet */
+    }
+}
+
+@media (max-width: 480px) {
+    .interestsGrid {
+        grid-template-columns: 1fr; /* Single column for small screens */
+    }
+
+    .interestBtn {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .interestsGrid {
+        grid-template-columns: repeat( 3, 1fr ); /* Ensure 3 items per row on large screens */
+    }
+}
