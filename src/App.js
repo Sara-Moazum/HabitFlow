@@ -8,6 +8,7 @@ import CreateHabit from './components/CreateHabit';
 import SetGoals from './components/SetGoals';
 import UpdateHabit from './components/UpdateHabit';
 import DeleteHabit from './components/DeleteHabit';
+import SelectInterests from './components/Selectinterests';
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
           <Route path="/setGoals" element={<SetGoals/>} />
           <Route path="/updateHabit" element={<UpdateHabit/>} />
           <Route path="/deleteHabit" element={<DeleteHabit/>} />
-
+          <Route path="/selectinterests" element={<SelectInterests />} />
 
 
         </Routes>
