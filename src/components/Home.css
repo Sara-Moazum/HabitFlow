@@ -1,0 +1,103 @@
+/* General Body Styling */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background-color: #1c1c1c;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes the full height of the viewport */
+  }
+  
+  /* Home Container Styling */
+  .home-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row; /* Horizontal alignment of content and image */
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    min-height: 80vh;
+    gap: 20px; /* Add spacing between content and image */
+    background-color: #151515;
+  }
+  
+  /* Content Box Styling */
+  .content-box {
+    width: 50%; /* Take up half the space */
+    text-align: left;
+    padding: 20px;
+    color: #aba5b2;
+  }
+  
+  /* Heading Styling */
+  .content-box h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #aba5b2; /* Text color */
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  /* Underline Below Heading */
+  .content-box h1::after {
+    content: "";
+    display: block;
+    width: 100%; /* Line width */
+    height: 3px; /* Line thickness */
+    background-color: #9f7aea; /* Line color */
+    margin-top: 10px;
+  }
+  
+  /* Paragraph Styling */
+  .content-box p {
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  
+  /* Signup Button Styling */
+  .signup-button {
+    background-color: #403d43;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .signup-button:hover {
+    transform: scale(1.05);
+    background-color: #9f7aea;
+  }
+  
+  /* Features List Styling */
+  .features-list {
+    margin-top: 20px;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .features-list li {
+    margin: 10px 0;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+  
+  /* Image Box Styling */
+  .image-box {
+    width: 40%; /* Take up 40% of the container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 px  rgba(0, 0, 0, 0.2); /* Add shadow for aesthetics */
+  }
+  

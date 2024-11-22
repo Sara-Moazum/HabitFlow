@@ -8,7 +8,7 @@ function NavBar() {
     <header className="navbar">
       <div className="logo">HABITFLOW</div>
       <nav className="nav-links">
-        <Link to="/">Home</Link>
+        <Link to="/Home">Home</Link>
         <Link to="/">Login</Link>
         <Link to="/contactUs">Contact</Link>
         <Link to="/about">About Us</Link>

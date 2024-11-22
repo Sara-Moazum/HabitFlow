@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode to decode the token
 import AboutUs from './components/AboutUs';
+import Home from './components/Home';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
 import SignUp from './components/SignUp';
@@ -42,6 +43,7 @@ function App() {
     <>
       <NavBar />
       <Routes>
+        <Route path="/Home" element={<Home />} />
         <Route path="/" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/about" element={<AboutUs />} />
