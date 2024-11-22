@@ -43,8 +43,9 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/Home" element={<Home />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} /> {/* Default route for the home page */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/Login" element={<Login/>} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactUs" element={<ContactUs />} />

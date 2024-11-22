@@ -9,7 +9,7 @@ function NavBar() {
       <div className="logo">HABITFLOW</div>
       <nav className="nav-links">
         <Link to="/Home">Home</Link>
-        <Link to="/">Login</Link>
+        <Link to="/Login">Login</Link>
         <Link to="/contactUs">Contact</Link>
         <Link to="/about">About Us</Link>
 

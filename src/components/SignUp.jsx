@@ -127,7 +127,7 @@ function SignUp() {
 
             <div style={{ color: "black", margin: "15px" }}>
               Already have an account? 
-              <Link to="/" style={{ color: "black", fontWeight: "bold" }}>Login</Link>
+              <Link to="/Login" style={{ color: "black", fontWeight: "bold" }}>Login</Link>
             </div>
           </form>
         </div>
