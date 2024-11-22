@@ -5,6 +5,8 @@ npm install axios
 npm install react react-dom
 npm install bcrypt
 npm install jsonwebtoken
+npm install @mui/icons-material
+npm install @emotion/react @emotion/styled
 
 
 export NODE_OPTIONS=--openssl-legacy-provider

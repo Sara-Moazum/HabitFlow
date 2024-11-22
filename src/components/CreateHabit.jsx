@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
-import './Habit.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirecting
+import './Habit.css'; // Make sure to adjust the CSS file to style the select and option
 
 const CreateHabit = () => {
   const [userId, setUserId] = useState('');
   const [habitName, setHabitName] = useState('');
   const [description, setDescription] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState([]); // State to store categories
+
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
   // Fetch categories when the component mounts
   useEffect(() => {
@@ -18,22 +22,23 @@ const CreateHabit = () => {
       try {
         // Decode the JWT token to get user data
         const decoded = jwt_decode(token);
+        console.log('Decoded Token:', decoded); // Log the decoded token
         setUserId(decoded.userId); // Assuming userId is part of the payload
       } catch (error) {
         console.error('Error decoding token:', error);
       }
+    } else {
+      console.log('Token not found in localStorage');
     }
 
     // Fetch categories from the backend
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
-        const result = await response.json();
-        if (response.ok) {
-          setCategories(result); // Set the fetched categories to the state
-        } else {
-          console.log('Error fetching categories:', result.message);
-        }
+        const response = await axios.get('http://localhost:5000/api/categories');
+        const result = response.data;  
+
+        console.log('Categories Data:', result); 
+        setCategories(result); 
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -50,24 +55,32 @@ const CreateHabit = () => {
       habitName,
       description,
       frequency,
-      category,
+      categoryId,
     };
 
     try {
-      const response = await fetch('/api/habits', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(habitData),
-      });
-      const result = await response.json();
-      if (response.ok) {
+      console.log('Sending request with data:', habitData);
+
+      const response = await axios.post('http://localhost:5000/api/habits/createhabit', habitData);
+
+      const result = response.data;  // Use response.data instead of response.ok
+      console.log('API Response:', response);
+
+      if (response.status === 201) {  // Check if response is created (status 201)
         console.log('Habit created:', result);
+        // Redirect to the dashboard after successfully creating the habit
+        navigate('/dashboard');
       } else {
         console.log('Error:', result.message);
       }
     } catch (error) {
       console.error('Error creating habit:', error);
     }
+  };
+
+  const handleCancel = () => {
+    // Redirect to the dashboard without creating a habit
+    navigate('/dashboard');
   };
 
   return (
@@ -78,15 +91,14 @@ const CreateHabit = () => {
           <div className="form-row">
             <label>Category:</label>
             <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              style={{ width: '250px' }}
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
             >
               <option>Select category</option>
               {/* Dynamically populate categories */}
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
+                <option key={cat.categoryId} value={cat.categoryId}>
+                  {cat.categoryName}
                 </option>
               ))}
             </select>
@@ -130,7 +142,7 @@ const CreateHabit = () => {
             <button type="submit" className="save-button">
               Save
             </button>
-            <button type="button" className="cancel-button">
+            <button type="button" className="cancel-button" onClick={handleCancel}>
               Cancel
             </button>
           </div>

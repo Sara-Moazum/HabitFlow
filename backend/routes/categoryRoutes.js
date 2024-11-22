@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
+    console.log('Request received for /api/categories');
     const categories = await Category.findAll();
     res.status(200).json(categories);
   } catch (error) {

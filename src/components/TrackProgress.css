@@ -1,0 +1,52 @@
+
+.track-progress-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0; 
+}
+
+.main-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0; 
+    flex: 1;
+    margin: 0; 
+}
+
+
+.section {
+    flex: 1; 
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center;
+    min-height: 100vh;
+    margin: 0; 
+    border-radius: 0; 
+}
+
+.daily {
+    background-color: #1A1A1D;
+}
+
+.weekly {
+    background-color: #2E2E33; 
+}
+
+.monthly {
+    background-color: #404044; 
+}
+
+
+.section h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    margin-top: 0; 
+    color: #d9d9d9; 
+}
+
+

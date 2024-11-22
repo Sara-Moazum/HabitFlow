@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Person, Lock } from '@mui/icons-material'; // Import Material Design icons
 
-// Login Component
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,12 +60,14 @@ function Login() {
           <img src="/images/login_Image.jpg" alt="Background" />
         </div>
         <div className="login-box">
+          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} /> {/* User profile icon */}
           <h2>LOGIN</h2>
 
           <form onSubmit={handleLogin}>
             {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
 
             <div className="input-group">
+              <Person style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Person icon */}
               <input
                 type="email"
                 placeholder="Email"
@@ -75,6 +77,7 @@ function Login() {
               />
             </div>
             <div className="input-group">
+              <Lock style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Lock icon */}
               <input
                 type="password"
                 placeholder="Password"

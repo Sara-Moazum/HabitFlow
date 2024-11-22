@@ -41,9 +41,8 @@ function SignUp() {
         password,
       });
 
-      // If signup is successful, navigate to login page
-      alert('Signup successful! Please log in.');
-      navigate('/'); // Redirect to login page
+  
+      navigate('/selectinterests'); // Redirect to login page
 
       // Reset form fields after successful signup
       setFirstName('');
@@ -69,7 +68,7 @@ function SignUp() {
           <form onSubmit={handleSubmit}>
           {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
 
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="text"
                 placeholder="First Name"
@@ -78,7 +77,7 @@ function SignUp() {
                 required
               />
             </div>
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="text"
                 placeholder="Last Name"
@@ -87,7 +86,7 @@ function SignUp() {
                 required
               />
             </div>
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="text"
                 placeholder="Username"
@@ -96,7 +95,7 @@ function SignUp() {
                 required
               />
             </div>
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="email"
                 placeholder="Email"
@@ -105,7 +104,7 @@ function SignUp() {
                 required
               />
             </div>
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="password"
                 placeholder="Password"
@@ -114,7 +113,7 @@ function SignUp() {
                 required
               />
             </div>
-            <div className="input-group">
+            <div className="input-group-signup">
               <input
                 type="password"
                 placeholder="Confirm Password"

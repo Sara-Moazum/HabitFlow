@@ -2,54 +2,34 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
-import jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';  // Not needed anymore
+import { Link } from 'react-router-dom';
 
-const Dashboard = ({ currentDate }) => {
+const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId and username as props
     console.log('Inside Dashboard component');
+    console.log('userid',userId);
+    console.log('username',username);
     const [frequency, setFrequency] = useState('Daily');
     const [habits, setHabits] = useState([]);
     const [goals, setGoals] = useState([]);
     const [progress, setProgress] = useState({});
-    const [username, setUsername] = useState('');
-    const [userId, setUserId] = useState('');
-
-    // Fetch username and userId from localStorage when the component mounts
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if (token) {
-            try {
-                const decoded = jwt_decode(token); // Decode the JWT
-                const userId = decoded.userId;
-                const username = decoded.username;
-
-                setUserId(userId); // Set userId
-                setUsername(username); // Set username
-            } catch (error) {
-                console.error('Error decoding the token', error);
-            }
-        } else {
-            console.log('No token found');
-        }
-    }, []);
-
-    console.log('Username:', username);
 
     // Fetch habits and goals whenever frequency or userId changes
     useEffect(() => {
         const fetchHabitsAndGoals = async () => {
             try {
+
                 // Fetch habits by frequency
-                const habitsResponse = await axios.get(`/api/habits/${frequency}`, {
-                    params: { userId },
-                });                
+                const habitsResponse = await axios.get(`http://localhost:5000/api/habits/${frequency}?userId=${userId}`);
+
                 setHabits(habitsResponse.data);
 
                 // Fetch all habits with their goals
-                const goalsResponse = await axios.get('/api/habits/all', {
-                    params: { userId },
+                const goalsResponse = await axios.get('http://localhost:5000/api/habits/all', {
+                    params: { userId },  // Use userId directly from props
                 });
                 setGoals(goalsResponse.data);
+                  
 
                 // Initialize progress for each habit
                 const initialProgress = {};
@@ -65,7 +45,7 @@ const Dashboard = ({ currentDate }) => {
         if (userId) {
             fetchHabitsAndGoals();
         }
-    }, [frequency, userId]);
+    }, [frequency, userId]);  // Fetch data again when userId or frequency changes
 
     // Handle checkbox state change and update progress
     const handleCheckboxChange = async (habitId) => {
@@ -195,13 +175,22 @@ const Dashboard = ({ currentDate }) => {
                 </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="actions-section">
-                <button>Set Goal</button>
-                <button>Create New Habit</button>
-                <button>Track Progress</button>
-                <button>Habit Suggestions</button>
-                <button>Account Settings</button>
+                <Link to="/setGoals">
+                    <button>Set Goal</button>
+                </Link>
+                <Link to="/createHabit">
+                    <button>Create New Habit</button>
+                </Link>
+                <Link to="/trackProgress">
+                    <button>Track Progress</button>
+                </Link>
+                <Link to="/habitSuggestions">
+                    <button>Habit Suggestions</button>
+                </Link>
+                <Link to="/accountSettings">
+                    <button>Account Settings</button>
+                </Link>
             </div>
         </div>
     );

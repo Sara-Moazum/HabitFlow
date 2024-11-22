@@ -1,106 +1,99 @@
 /* Main Container */
 .create-habit-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #161515;
-    color: #e0e0e0;
-    height: 100vh;
-  }
-  
-  /* Content Section */
-  .create-habit-content {
-    width: 700px;
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .create-habit-content h2 {
-    font-size: 1.8rem;
-    color: #ffffff;
-  }
-  
-  .create-habit-content .icon {
-    font-size: 1.2rem;
-    color: #a579f2;
-  }
-  
-  .create-habit-content .quote {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #0c0c0c;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
-    background-color: #615D66;
-    border-radius: 5px;
-    height: 25px;
-    padding-top: 5px;
-  }
-  
-  /* Form Styles */
-  .form-container {
-    display: grid;
-    grid-template-columns: 150px 1fr; /* Labels are 150px wide, inputs take remaining space */
-    gap: 1rem; /* Adjust spacing between columns */
-    align-items: center;
-    margin-top:70px;
-  }
-  
-  .form-row {
-    display: contents; /* Allows each label and input to be placed in separate grid cells */
-  }
-  
-  .form-row label {
-    text-align: left;
-    color: #cccccc;
-    font-size: 0.9rem;
-    margin-right: 1rem;
-    font-weight: bold;
-  }
-  
-  .form-row select,
-  .form-row input[type="text"],
-  .form-row textarea {
-   
-    padding: 0.5rem;
-    background-color: transparent;
-    color: #e0e0e0;
-    border: 1px solid #444444;
-    border-radius: 4px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #161515;
+  color: #e0e0e0;
+  height: 100vh;
+}
 
- 
-  .form-row textarea {
-    height: 4rem;
-  }
+/* Content Section */
+.create-habit-content {
+  width: 700px;
+  text-align: center;
+  padding: 2rem;
+}
 
-  .form-row select{
-    color: #444444;
-  }
-  
-  
-  .form-buttons {
-    grid-column: span 2; /* Span both columns for buttons */
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  
+.create-habit-content h2 {
+  font-size: 1.8rem;
+  color: #ffffff; /* White color */
+}
 
-  .save-button, .cancel-button {
-    padding: 0.5rem 1.5rem;
-    border: none;
-    font-size: 0.9rem;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #615D66;
-    color: #000000;
-    border-radius: 15px;
-    margin:15px;
-    width:100px;
+.create-habit-content .icon {
+  font-size: 1.2rem;
+  color: #ffffff; /* White color */
+}
 
-  }
-  
- 
-  
+.create-habit-content .quote {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff; /* White color */
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #615D66;
+  border-radius: 5px;
+  height: 25px;
+  padding-top: 5px;
+}
+
+/* Form Styles */
+.form-container {
+  display: grid;
+  grid-template-columns: 150px 1fr; /* Labels are 150px wide, inputs take remaining space */
+  gap: 1rem; /* Adjust spacing between columns */
+  align-items: center;
+  margin-top: 70px;
+}
+
+.form-row {
+  display: contents; /* Allows each label and input to be placed in separate grid cells */
+}
+
+.form-row label {
+  text-align: left;
+  color: #ffffff; /* White color */
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.form-row select,
+.form-row input[type="text"],
+.form-row textarea {
+  padding: 0.5rem;
+  background-color: transparent;
+  color: #ffffff; /* White text color */
+  border: 1px solid #444444;
+  border-radius: 4px;
+}
+
+.form-row textarea {
+  height: 4rem;
+}
+
+.form-row select {
+  color: #ffffff; /* White color */
+}
+
+/* Button Styles */
+.form-buttons {
+  grid-column: span 2; /* Span both columns for buttons */
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.save-button, .cancel-button {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #615D66;
+  color: #ffffff; /* White color */
+  border-radius: 15px;
+  margin: 15px;
+  width: 100px;
+}

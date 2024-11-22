@@ -1,6 +1,6 @@
 import { Sequelize} from "sequelize";
 
-const sequelize = new Sequelize('HabitFlow','root','',{
+const sequelize = new Sequelize('HabitFlow','mana','123456',{
     host: 'localhost',
     dialect: 'mysql',
 });

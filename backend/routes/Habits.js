@@ -27,7 +27,7 @@ router.get('/:frequency', async (req, res) => {
 });
 
 // Save a new habit
-router.post('/', async (req, res) => {
+router.post('/createhabit', async (req, res) => {
   const { userId, habitName, description, frequency, categoryId } = req.body;
 
   try {

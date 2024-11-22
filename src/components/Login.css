@@ -1,160 +1,156 @@
 /* Basic page reset */
 * {
-    margin: 0;
-    padding: 0;
-    /* box-sizing: border-box; */
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-     background-color: #161515; 
-    color: #ffffff;
-  }
-  .login-container {
-    position: relative;
-    width: 100%;
-  }
-  
-  .background-image img {
-    width: 100%;
-    height: 100vh;
-    opacity: 0.3;
-  }
-  
-  .login-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    width:100%;
-  }
-  
-  
-  
-  
-  
-  
-  
-  .login-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #d1cfcf;
-    padding: 30px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 347px;
-    text-align: center;
-  }
-  
-  .avatar img {
-    width: 50px;
-    margin-bottom: 10px;
-  }
-  
-  h2 {
-    color: #333;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .input-group {
-    margin-bottom: 15px;
-    text-align: left;
-    width: 285px;
+  margin: 0;
+  padding: 0;
+}
 
-  }
-  
-  .input-group label {
-    display: block;
-    font-size: 0.9rem;
-    color: #333;
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #333; /* Dark border color */
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
-  }
-  
-  .input-group input::placeholder {
-    color: #ccc; /* Light gray placeholder text */
-  }
-  
-  
-  .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #333;
-    margin: 10px 0;
-  }
-  
-  .login-button {
-    width: 200px;
-    padding: 10px;
-    background-color: #070707;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #161515;
+  color: #ffffff;
+}
 
-  }
-  
-  .login-button:hover {
-    background-color: #5d5c5e;
-  }
-  
- /* CheckBox Styling */
+.login-container {
+  position: relative;
+  width: 100%;
+}
 
- /* Hide the default checkbox */
- .custom-checkbox input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-  }
-  
-  /* Style the label to look like a checkbox */
-  .custom-checkbox {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #333;
-    position: relative;
-  }
-  
-  /* Create a custom checkbox square */
-  .custom-checkbox::before {
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    background-color: #000; /* Black background */
-    border-radius: 3px;
-    border: 1px solid #333;
-  }
-  
-  /* Display a white checkmark when the checkbox is checked */
-  .custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::before {
-    background-color: #000; /* Keep background black */
-  }
-  
-  .custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::after {
-    content: "✔"; /* Unicode checkmark */
-    position: absolute;
-    left: 4px;
-    top: -1px;
-    color: #fff; /* White color for the checkmark */
-    font-size: 12px;
-    line-height: 16px;
-  }
-   
+.background-image img {
+  width: 100%;
+  height: 100vh;
+  opacity: 0.3;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d1cfcf;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 347px;
+  text-align: center;
+}
+
+h2 {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.input-group,.input-group-signup {
+  margin-bottom: 15px;
+  text-align: left;
+  width: 285px;
+  position: relative;
+}
+
+.input-group i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px 8px 8px 50px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #000;
+  color: #fff;
+}
+
+.input-group-signup input {
+  width: 100%;
+  padding: 8px 8px 8px 30px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #000;
+  color: #fff;
+}
+
+.input-group input::placeholder,.input-group-signup input::placeholder {
+  color: #fff;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333;
+  margin: 10px 0;
+}
+
+.login-button {
+  width: 200px;
+  padding: 10px;
+  background-color: #070707;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #5d5c5e;
+}
+
+/* CheckBox Styling */
+
+/* Hide the default checkbox */
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Style the label to look like a checkbox */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #333;
+  position: relative;
+}
+
+/* Create a custom checkbox square */
+.custom-checkbox::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-color: #000;
+  border-radius: 3px;
+  border: 1px solid #333;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::before {
+  background-color: #000;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::after {
+  content: "✔";
+  position: absolute;
+  left: 4px;
+  top: -1px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+}
