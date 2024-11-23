@@ -5,12 +5,10 @@ import initializeGoalModel from './Goal.js';
 import initializeHabitModel from './Habit.js';
 import initializeCategoryModel from './Category.js';
 
-
-const User = initializeUserModel(sequelize,Sequelize);
-const Goal = initializeGoalModel(sequelize,Sequelize);
-const Habit = initializeHabitModel(sequelize,Sequelize);
-const Category = initializeCategoryModel(sequelize,Sequelize);
-
+const User = initializeUserModel(sequelize, Sequelize);
+const Goal = initializeGoalModel(sequelize, Sequelize);
+const Habit = initializeHabitModel(sequelize, Sequelize);
+const Category = initializeCategoryModel(sequelize, Sequelize);
 
 const db = {
     sequelize,
@@ -21,4 +19,7 @@ const db = {
     Habit,
 };
 
+
+
+    
 export default db;
