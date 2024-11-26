@@ -10,7 +10,8 @@ CREATE TABLE users (
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    signUpDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    signUpDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    lastLogin TIMESTAMP NULL
 );
 
 -- Interests Table (no changes)
@@ -67,7 +68,8 @@ CREATE TABLE habit_progress (
     habitId INT NOT NULL,  -- Foreign key to habits table
     completionDate DATE NOT NULL,  -- Tracks completion for a specific day
     isCompleted BOOLEAN DEFAULT FALSE,  -- Whether the habit was marked completed
-    FOREIGN KEY (habitId) REFERENCES habits(habitId) ON DELETE CASCADE
+    FOREIGN KEY (habitId) REFERENCES habits(habitId) ON DELETE CASCADE,
+	CONSTRAINT unique_habit_date UNIQUE (habitId, completionDate)
 );
 
 -- Contact Feedback Table (removed 'isHabitTrackerUser' attribute)
@@ -116,6 +118,9 @@ VALUES
     ('Outdoor Adventures'),
     ('Business & Entrepreneurship');
 
+
+select * from habit_progress;
+select * from habit_progress;
 
 
 

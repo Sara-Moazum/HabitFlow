@@ -76,6 +76,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
+    // Update lastLogin timestamp
+    await user.update({ lastLogin: new Date() });
+
     // Create a JWT token including userId and username
     const token = jwt.sign({ userId: user.userId, username: user.username }, 'your-secret-key', { expiresIn: '1h' });
 
@@ -84,6 +87,5 @@ router.post('/login', async (req, res) => {
     return res.status(500).json({ message: "Error during login", error: error.message });
   }
 });
-
 
 export default router;

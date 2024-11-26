@@ -4,13 +4,9 @@ import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
 
-// Placeholder function to calculate completion rate dynamically
-const calculateCompletionRate = (habitId) => {
-    const progressData = [
-        { date: '2024-11-20', completed: true },
-        { date: '2024-11-21', completed: false },
-        { date: '2024-11-22', completed: true },
-    ]; // Example progress data
+
+const calculateCompletionRate = (habitId, habitProgress) => {
+    const progressData = habitProgress[habitId] || [];
 
     const totalDays = progressData.length;
     const completedDays = progressData.filter((entry) => entry.completed).length;
@@ -44,7 +40,7 @@ const Dashboard = ({ userId, username }) => {
 
                 const initialProgress = {};
                 habitsResponse.data.forEach((habit) => {
-                    initialProgress[habit.habitId] = false;
+                    initialProgress[habit.habitId] = [];  // Store an empty array for each habit to track its progress
                 });
                 setProgress(initialProgress);
             } catch (error) {
@@ -58,19 +54,29 @@ const Dashboard = ({ userId, username }) => {
     }, [frequency, userId]);
 
     const handleCheckboxChange = async (habitId) => {
-        const newProgress = !progress[habitId];
+        const newProgress = progress[habitId] || [];
+        const habitAlreadyCompleted = newProgress.some((entry) => entry.completed);
+
+        if (!habitAlreadyCompleted) {
+            // Add progress entry (mark completed)
+            newProgress.push({ date: currentDate, completed: true });
+        } else {
+            // Add missed day (mark not completed)
+            newProgress.push({ date: currentDate, completed: false });
+        }
+
+        // Update progress state
         setProgress((prev) => ({
             ...prev,
             [habitId]: newProgress,
         }));
 
         try {
-            // Save the progress data immediately to the habit_progress table
-            await axios.post('/api/habits/update-progress', {
+            await axios.post('http://localhost:5000/api/habits/update-progress', {
                 userId,
                 habitId,
                 date: currentDate,
-                progress: newProgress, // true for completed, false for not completed
+                progress: !habitAlreadyCompleted, // true for completed, false for not completed
             });
         } catch (error) {
             console.error('Error updating progress:', error);
@@ -80,6 +86,13 @@ const Dashboard = ({ userId, username }) => {
     const handleFrequencyChange = (newFrequency) => {
         setFrequency(newFrequency);
     };
+
+    // Filter habits that are marked as completed for the first table
+    const filteredHabitsForTable = habits.filter((habit) => {
+        const habitProgressData = progress[habit.habitId] || [];
+        const completed = habitProgressData.some((entry) => entry.completed);
+        return !completed;  // Only show habits that are not marked as completed
+    });
 
     return (
         <div className="dashboard-container">
@@ -106,7 +119,7 @@ const Dashboard = ({ userId, username }) => {
                         <tr>
                             <th>Frequency</th>
                             <th>Date</th>
-                            {habits.map((habit, index) => (
+                            {filteredHabitsForTable.map((habit, index) => (
                                 <th key={index}>{habit.habitName}</th>
                             ))}
                             <th>Progress &#8721;</th>
@@ -116,17 +129,17 @@ const Dashboard = ({ userId, username }) => {
                         <tr>
                             <td>{frequency}</td>
                             <td>{currentDate}</td>
-                            {habits.map((habit) => (
+                            {filteredHabitsForTable.map((habit) => (
                                 <td key={habit.habitId}>
                                     <input
                                         type="checkbox"
                                         className="custom-checkbox"
-                                        checked={progress[habit.habitId] || false}
+                                        checked={progress[habit.habitId]?.some((entry) => entry.completed) || false}
                                         onChange={() => handleCheckboxChange(habit.habitId)}
                                     />
                                 </td>
                             ))}
-                            <td>50%</td> {/* Placeholder for progress percentage */}
+                            <td>{/* Placeholder for progress percentage */} 50%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -135,7 +148,7 @@ const Dashboard = ({ userId, username }) => {
             {/* Habit List and Details Table (Second Table) */}
             <div className="details-section">
                 <div className="habit-list">
-                    <h3>Habits</h3>
+                    <h3>Habit</h3>
                     {habits.map((habit) => (
                         <div key={habit.habitId} className="habit-item">
                             {habit.habitName}
@@ -154,7 +167,7 @@ const Dashboard = ({ userId, username }) => {
                         <tbody>
                             {habits.map((habit) => {
                                 const goal = goals.find((g) => g.habitId === habit.habitId);
-                                const completionRate = calculateCompletionRate(habit.habitId);
+                                const completionRate = calculateCompletionRate(habit.habitId, progress);
 
                                 return (
                                     <tr key={habit.habitId}>
