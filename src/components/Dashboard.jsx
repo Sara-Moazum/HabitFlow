@@ -2,39 +2,49 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
-import jwt_decode from 'jwt-decode';  // Not needed anymore
 import { Link } from 'react-router-dom';
 
-const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId and username as props
-    console.log('Inside Dashboard component');
-    console.log('userid',userId);
-    console.log('username',username);
+// Placeholder function to calculate completion rate dynamically
+const calculateCompletionRate = (habitId) => {
+    const progressData = [
+        { date: '2024-11-20', completed: true },
+        { date: '2024-11-21', completed: false },
+        { date: '2024-11-22', completed: true },
+    ]; // Example progress data
+
+    const totalDays = progressData.length;
+    const completedDays = progressData.filter((entry) => entry.completed).length;
+
+    return totalDays > 0 ? ((completedDays / totalDays) * 100).toFixed(2) : 0;
+};
+
+const Dashboard = ({ userId, username }) => {
     const [frequency, setFrequency] = useState('Daily');
     const [habits, setHabits] = useState([]);
     const [goals, setGoals] = useState([]);
     const [progress, setProgress] = useState({});
+    const [currentDate, setCurrentDate] = useState('');
 
-    // Fetch habits and goals whenever frequency or userId changes
     useEffect(() => {
+        // Get current date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        setCurrentDate(today);
+
         const fetchHabitsAndGoals = async () => {
             try {
-
-                // Fetch habits by frequency
-                const habitsResponse = await axios.get(`http://localhost:5000/api/habits/${frequency}?userId=${userId}`);
-
+                const habitsResponse = await axios.get(
+                    `http://localhost:5000/api/habits/${frequency}?userId=${userId}`
+                );
                 setHabits(habitsResponse.data);
 
-                // Fetch all habits with their goals
                 const goalsResponse = await axios.get('http://localhost:5000/api/habits/all', {
-                    params: { userId },  // Use userId directly from props
+                    params: { userId },
                 });
                 setGoals(goalsResponse.data);
-                  
 
-                // Initialize progress for each habit
                 const initialProgress = {};
                 habitsResponse.data.forEach((habit) => {
-                    initialProgress[habit.habitId] = false; // Default unchecked
+                    initialProgress[habit.habitId] = false;
                 });
                 setProgress(initialProgress);
             } catch (error) {
@@ -45,24 +55,22 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
         if (userId) {
             fetchHabitsAndGoals();
         }
-    }, [frequency, userId]);  // Fetch data again when userId or frequency changes
+    }, [frequency, userId]);
 
-    // Handle checkbox state change and update progress
     const handleCheckboxChange = async (habitId) => {
         const newProgress = !progress[habitId];
-
         setProgress((prev) => ({
             ...prev,
-            [habitId]: newProgress, // Toggle progress for the habit
+            [habitId]: newProgress,
         }));
 
         try {
-            // Send updated progress to the backend
+            // Save the progress data immediately to the habit_progress table
             await axios.post('/api/habits/update-progress', {
                 userId,
                 habitId,
                 date: currentDate,
-                progress: newProgress, // Send the updated progress
+                progress: newProgress, // true for completed, false for not completed
             });
         } catch (error) {
             console.error('Error updating progress:', error);
@@ -91,7 +99,7 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                 </button>
             </div>
 
-            {/* First Table */}
+            {/* Habit Tracking Table (First Table) */}
             <div className="habits-table-section">
                 <table className="habits-table">
                     <thead>
@@ -124,57 +132,48 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                 </table>
             </div>
 
-            {/* Main Content */}
-            <div className="main-content">
-                {/* Habits Section - Displayed only if habits are found */}
-                {habits.length > 0 && (
-                    <div className="habits-section">
-                        <h3 className="habits-heading">Habits</h3>
-                        <div className="habit-list">
-                            {habits.map((habit) => (
-                                <div key={habit.habitId} className="habit-item">
-                                    <span>{habit.habitName}</span>
-                                </div>
-                            ))}
+            {/* Habit List and Details Table (Second Table) */}
+            <div className="details-section">
+                <div className="habit-list">
+                    <h3>Habits</h3>
+                    {habits.map((habit) => (
+                        <div key={habit.habitId} className="habit-item">
+                            {habit.habitName}
                         </div>
-                    </div>
-                )}
+                    ))}
+                </div>
 
-                {/* Details Table */}
-                <div className="details-section">
-                    {goals.length === 0 ? (
-                        <div className="no-habits-message">
-                            <p>No habits found. Create a new habit to get started!</p>
-                        </div>
-                    ) : (
-                        <>
-                            {/* Table Headings outside the table */}
-                            <div className="details-heading">
-                                <span>Description</span>
-                                <span>Goal</span>
-                                <span>Completion Rate</span>
-                                <span>Actions</span>
-                            </div>
-                            <table className="details-table">
-                                <tbody>
-                                    {goals.map((goal) => (
-                                        <tr key={goal.goalId}>
-                                            <td>{goal.habit.description}</td>
-                                            <td>{goal.goal}</td>
-                                            <td>60%</td> {/* Placeholder for completion rate */}
-                                            <td>
-                                                <button>Update</button>
-                                                <button>Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </>
-                    )}
+                <div className="details-table-wrapper">
+                    <div className="details-heading">
+                        <span>Description</span>
+                        <span>Goal</span>
+                        <span>Completion Rate</span>
+                        <span>Actions</span>
+                    </div>
+                    <table className="details-table">
+                        <tbody>
+                            {habits.map((habit) => {
+                                const goal = goals.find((g) => g.habitId === habit.habitId);
+                                const completionRate = calculateCompletionRate(habit.habitId);
+
+                                return (
+                                    <tr key={habit.habitId}>
+                                        <td>{habit.description}</td>
+                                        <td>{goal ? goal.goal : "No goal set"}</td>
+                                        <td>{completionRate}%</td>
+                                        <td>
+                                            <button>Update</button>
+                                            <button>Delete</button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            {/* Additional Action Buttons */}
             <div className="actions-section">
                 <Link to="/setGoals">
                     <button>Set Goal</button>

@@ -1,7 +1,7 @@
 /* General Styling */
 .dashboard-container {
     font-family: Arial, sans-serif;
-    color: #D9D9D9; /* Text color */
+    color: #D9D9D9;
     background-color: #161515;
     min-height: 100vh;
     display: flex;
@@ -16,13 +16,18 @@
     text-align: center;
 }
 
+/* Frequency Options */
 .frequency-options {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
+    display: flex; /* Flexbox to arrange buttons horizontally */
+    justify-content: flex-start; /* Align buttons to the left */
+    gap: 8px; /* Small gap between buttons */
+    margin-top: 20px; /* Adds space above the frequency options */
+    width: 90%; /* Ensure the buttons stretch across the full width */
+    max-width: none; /* Prevents maximum width limiting the buttons */
+    flex-wrap: nowrap; /* Prevent buttons from wrapping */
 }
 
+/* Button styling for frequency options */
 .frequency-options button {
     background: none;
     color: #D9D9D9;
@@ -31,26 +36,56 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: color 0.3s; /* Only change text/icon color on hover */
+    width: auto; /* Set a fixed width for consistency */
+    text-align: left;
 }
 
 .frequency-options button:hover {
-    color: #A965FF;
+    color: #A965FF; /* Change text and icon to purple on hover */
+    background-color: transparent;
 }
 
+/* Ensure calendar icon size matches the font size */
 .calendar-icon {
-    padding: 5px;
-    margin-right: 8px;
+    font-size: 1rem; /* Set icon size to match font size */
+    padding: 0; /* Remove extra padding */
+    margin-right: 5px;
+}
+
+/* Habit List and Table Section */
+.habits-table-section, .details-section {
+    width: 90%; /* Slight margin on left and right */
+    margin-bottom: 70px;
+    display: flex;
+    gap: 30px; /* Space between habit list and details table */
+}
+
+/* Habit List Styling */
+.habit-list {
+    flex: 0 0 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 75px;
+}
+
+.habit-item {
+    padding: 8px;
+    background-color: transparent;
     border: 1px solid #615D66;
+    color: #D9D9D9;
+    text-align: center;
+    font-size: 0.9rem;
+    width: 200px;
 }
 
-/* Habits Table Section */
-.habits-table-section {
-    width: 100%;
-    max-width: 1200px;
-    margin-bottom: 20px;
+.habit-list h3 {
+    color: #D9D9D9;
+    font-size: 1rem;
+    margin-left: 75px;
 }
 
+/* Habit Tracking Table (First Table) */
 .habits-table {
     width: 100%;
     border-collapse: collapse;
@@ -60,89 +95,26 @@
 
 .habits-table th, .habits-table td {
     border: 1px solid #615D66;
-    padding: 10px;
+    padding: 8px;
     text-align: center;
-    color: #D9D9D9;
-    width: 20%;
 }
 
-.habits-table td {
-    background-color: #151515; /* Dark gray background for the table rows */
-}
 
-/* Date-specific Styling */
-.habits-table td:nth-child(2) { /* The Date column */
-    background-color: #202020; /* Slightly different background color for date */
-    font-size: 1.1rem; /* Increase font size for better readability */
-    font-weight: bold; /* Bold the date for emphasis */
-}
 
-/* Custom Checkbox Styling */
-.custom-checkbox {
-    appearance: none;
-    background-color: transparent;
-    border: 1px solid #615D66;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-
-.custom-checkbox:checked {
-    background-color: #A965FF;
-}
-
-/* Main Content Styling */
-.main-content {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 1200px;
-}
-
-.habits-section {
+/* Habit Details Table (Second Table) */
+.details-table-wrapper {
     flex: 1;
-    max-width: 30%;
-}
-
-.habit-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.habit-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    color: #D9D9D9;
-    border: 1px solid #615D66;
-    background-color: transparent;
     width: 100%;
-    max-width: 250px;
-}
-
-.details-section {
-    flex: 2;
-    max-width: 70%;
 }
 
 .details-heading {
     display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
+    justify-content: center;
+    gap: 240px;
+    font-size: 1rem;
     margin-bottom: 10px;
-    text-align: left;
     color: #D9D9D9;
-}
-
-/* Styling for the message when no habits are available */
-.no-habits-message {
-    font-size: 1.5rem; /* Larger font size */
-    text-align: center;
-    color: #D9D9D9;
-    margin: 40px 0; /* Margin at the top and bottom */
+    padding: 10px 0;
 }
 
 .details-table {
@@ -153,16 +125,19 @@
 
 .details-table th, .details-table td {
     border: 1px solid #615D66;
-    padding: 10px;
+    padding: 8px;
     text-align: center;
-    color: #D9D9D9;
-    width: 50%;
+}
+
+.details-table td {
+    width: 20%; 
 }
 
 .details-table th {
-    text-align: left;
+    background-color: #202020;
 }
 
+/* Action Buttons */
 .actions-section {
     display: flex;
     justify-content: center;
