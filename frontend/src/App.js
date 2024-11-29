@@ -17,6 +17,7 @@ import Dashboard from './components/Dashboard';
 import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
 import HabitSuggestions from './components/HabitSuggestions';
+import ForgetPassword from "./components/ForgetPassword";
 
 function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
@@ -47,6 +48,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/Login" element={<Login/>} />
         <Route path="/signUp" element={<SignUp />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/createHabit" element={<CreateHabit userId={user.userId} />} />

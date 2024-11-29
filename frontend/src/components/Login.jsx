@@ -96,7 +96,8 @@ function Login() {
                 Remember me
               </label>
 
-              <a href="#forgot-password" style={{ color: 'black' }}>
+
+              <a href="/forgetpassword" style={{ color: 'black' }}>
                 Forgot Password?
               </a>
             </div>
