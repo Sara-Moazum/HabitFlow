@@ -1,52 +1,80 @@
-
 .track-progress-page {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin: 0; 
-}
-
-.main-body {
+    margin: 0;
+    padding: 0; /* Remove any padding from the body */
+  }
+  
+  body {
+    margin: 0; /* Remove default body margin */
+  }
+  
+  .main-body {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    padding: 0; 
+    padding: 0; /* Remove padding from left and right */
     flex: 1;
-    margin: 0; 
-}
-
-
-.section {
-    flex: 1; 
+    width: 100%; /* Ensure the main-body takes full width */
+  }
+  
+  .section {
+    flex: 1;
     padding: 20px;
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
-    margin: 0; 
-    border-radius: 0; 
-}
-
-.daily {
-    background-color: #1A1A1D;
-}
-
-.weekly {
-    background-color: #2E2E33; 
-}
-
-.monthly {
-    background-color: #404044; 
-}
-
-
-.section h2 {
+    width: 100%; /* Ensure sections take up the full width */
+  }
+  
+  .graph-container {
+    width: 80%; /* Adjust for graph width */
+    margin-bottom: 20px;
+  }
+  
+  .progress-bar {
+    height: 30px; /* Height of the bar */
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  
+  .graph-container p {
+    color: #bdbdbd;
+  }
+  
+  .daily {
+    background-color: #1A1A1D; /* Background color for daily */
+  }
+  
+  .weekly {
+    background-color: #2E2E33; /* Background color for weekly */
+  }
+  
+  .monthly {
+    background-color: #404044; /* Background color for monthly */
+  }
+  
+  .section h2 {
     font-size: 1.5rem;
     font-weight: normal;
-    margin-top: 0; 
-    color: #d9d9d9; 
-}
-
-
+    margin-top: 0;
+    color: #d9d9d9;
+  }
+  
+  /* Progress bar colors for each frequency */
+  .daily .progress-bar {
+    background-color: #A965FF !important; /* Purple color for daily */
+  }
+  
+  .weekly .progress-bar {
+    background-color: #615D66 !important; /* Greyish color for weekly */
+  }
+  
+  .monthly .progress-bar {
+    background-color: #7289DA !important; /* Blueish color for monthly (fits the theme) */
+  }
+  
