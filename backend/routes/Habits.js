@@ -110,4 +110,4 @@ router.post('/delete-completed-habits', async (req, res) => {
     }
 });
 
-export default router;
+export default router
