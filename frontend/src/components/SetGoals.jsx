@@ -1,7 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Habit.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const SetGoals = () => {
+  const {userId, habitId} = useParams();
+  const [formData, setFormData] = useState({
+    goal: '',
+    progressTrack: '',
+    startDate: '',
+  });
+
+  const navigate = useNavigate();
+  
+  const [message, setMessage] = useState('');
+
+  const handleInputChange = (e) =>{
+    const {name,value} = e.target;
+    setFormData((prevData) =>({
+      ...prevData,
+      [name] : value,
+    }))
+  };
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    try {
+      const response = await axios.post(`http://localhost:5000/api/habits/setGoal/${habitId}/${userId}`,{
+        goal: formData.goal,
+        progressTrack: formData.progressTrack,
+        startDate: formData.startDate,
+      });
+      setMessage('Goal set successfully!');
+      alert("Goal set successfully!");
+      navigate("/dashboard")
+      setFormData({ goal: '', progressTrack: '', startDate: '' }); // Reset form
+    } catch (error) {
+      console.error('Error setting goal:', error);
+      setMessage('Failed to set goal. Please try again.');
+    }
+  }
   return (
     <div className="create-habit-container">
       <div className="create-habit-content">
@@ -9,33 +48,47 @@ const SetGoals = () => {
         <hr style={{width:"330px", marginLeft:"180px", marginBottom:"40px"}}/>
         <div className="quote">"The Journey of a thousand miles begins with one step." – Leo Tzu</div>
 
-        <form className="form-container">
-          <div className="form-row">
+        <form className="form-container" onSubmit={handleSubmit}>
+          {/* <div className="form-row">
             <label>Habit Name:</label>
             <input type="text" placeholder="Enter Habit name" style={{width:"300px"}}/>
 
-          </div>
+          </div> */}
 
           <div className="form-row">
             <label>Goal:</label>
-            <input type="text" placeholder="Enter Goal" style={{width:"300px"}}/>
+            <input type="text" name="goal" placeholder="Enter Goal" value={formData.goal} onChange={handleInputChange} style={{width:"300px"}}/>
           </div>
 
           <div className="form-row">
-            <label>Progress Track:</label>
-            <input type="text" placeholder="Enter days to tarck" style={{width:"300px"}}/>
-
+            <label>No. Of Days To Track:</label>
+            <input
+              type="text"
+              name="progressTrack"
+              placeholder="Enter days to track"
+              value={formData.progressTrack}
+              onChange={handleInputChange}
+              style={{ width: '300px' }}
+            />
           </div>
 
           <div className="form-row">
-            <label>Description:</label>
-            <textarea style={{width:"450px"}} ></textarea>
+            <label>Start Date:</label>
+            <input
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleInputChange}
+              style={{ width: '300px' }}
+            />
           </div>
 
           <div className="form-buttons">
             <button type="submit" className="save-button">Save</button>
-            <button type="button" className="cancel-button">Cancel</button>
-          </div>
+            <button type="button" className="cancel-button" onClick={() => setFormData({ goal: '', progressTrack: '', startDate: '' })}>
+              Cancel
+            </button>
+            </div>
         </form>
       </div>
     </div>

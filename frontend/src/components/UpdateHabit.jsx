@@ -1,50 +1,150 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Habit.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const UpdateHabit = () => {
-  return (
-    <div className="create-habit-container">
-      <div className="create-habit-content">
-        <h2>Update Habit <span className="icon"></span></h2>
-        <hr style={{width:"330px", marginLeft:"180px", marginBottom:"40px"}}/>
-        <div className="quote">"Success is the same of small efforts, repeated day in and day out." – Robert Collier</div>
+    const { habitId } = useParams();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        habitName: '',
+        description: '',
+        frequency: '',
+        categoryId: '',
+        startDate: ''
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-        <form className="form-container">
-          <div className="form-row">
-            <label>Name:</label>
-            <input type="text" placeholder="Enter Habit name" style={{width:"300px"}}/>
+    // Fetch habit details
+    useEffect(() => {
+        const fetchHabitDetails = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/habits/habitDetails/${habitId}`);
+                const habit = response.data;
+                setFormData({
+                    habitName: habit.habitName || '',
+                    description: habit.description || '',
+                    frequency: habit.frequency || '',
+                    categoryId: habit.categoryId || '',
+                    startDate: habit.startDate || ''
+                });
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching habit details:', err);
+                setError('Failed to fetch habit details.');
+                setLoading(false);
+            }
+        };
 
-          </div>
+        fetchHabitDetails();
+    }, [habitId]);
 
-          <div className="form-row">
-          <label>Frequency:</label>
-            <select style={{width:"370px"}}>
-              <option>Select</option>
-              <option>Daily</option>
-              <option>Weekly</option>
-              <option>Monthly</option>
-            </select>
-          </div>
+    // Handle form input changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
 
-          <div className="form-row">
-            <label>Description:</label>
-            <textarea style={{width:"450px"}} ></textarea>
-          </div>
+        try {
+            const response = await axios.put(`http://localhost:5000/api/habits/updatehabit/${habitId}`, formData);
+            console.log('Habit updated successfully:', response.data);
+            alert('Habit updated successfully.');
+            navigate('/dashboard');
+        } catch (err) {
+            console.error('Error updating habit:', err);
+            setError('Failed to update habit.');
+        }
+    };
 
-          <div className="form-row">
-            <label> Goal:</label>
-            <textarea style={{width:"450px"}} ></textarea>
-          </div>
+    // Handle cancel button
+    const handleCancel = () => {
+        navigate('/dashboard');
+    };
 
-          <div className="form-buttons">
-            <button type="submit" className="save-button">Save</button>
-            <button type="button" className="cancel-button">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
+    return (
+        <div className="create-habit-container">
+            <div className="create-habit-content">
+                <h2>
+                    Update Habit <span className="icon"></span>
+                </h2>
+                <hr style={{ width: '330px', marginLeft: '180px', marginBottom: '40px' }} />
+                <div className="quote">
+                    "Success is the sum of small efforts, repeated day in and day out." – Robert Collier
+                </div>
+
+                <form className="form-container" onSubmit={handleSubmit}>
+                    <div className="form-row">
+                        <label>Name:</label>
+                        <input
+                            type="text"
+                            name="habitName"
+                            value={formData.habitName}
+                            onChange={handleChange}
+                            placeholder="Enter Habit name"
+                            style={{ width: '300px' }}
+                        />
+                    </div>
+
+                    <div className="form-row">
+                        <label>Frequency:</label>
+                        <select
+                            name="frequency"
+                            value={formData.frequency}
+                            onChange={handleChange}
+                            style={{ width: '370px', color: 'gray' }}
+                        >
+                            <option value="">Select</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div className="form-row">
+                        <label>Description:</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            style={{ width: '450px' }}
+                        ></textarea>
+                    </div>
+
+                    <div className="form-row">
+                        <label>Start Date:</label>
+                        <input
+                            type="date"
+                            name="startDate"
+                            value={formData.startDate}
+                            onChange={handleChange}
+                            style={{ width: '300px' }}
+                        />
+                    </div>
+
+                    <div className="form-buttons">
+                        <button type="submit" className="save-button">
+                            Save
+                        </button>
+                        <button type="button" className="cancel-button" onClick={handleCancel}>
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 export default UpdateHabit;

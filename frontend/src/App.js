@@ -50,8 +50,8 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contactUs" element={<ContactUs />} />
         <Route path="/createHabit" element={<CreateHabit userId={user.userId} />} />
-        <Route path="/setGoals" element={<SetGoals />} />
-        <Route path="/updateHabit" element={<UpdateHabit />} />
+        <Route path="/setGoals/:habitId/:userId" element={<SetGoals />} />
+        <Route path="/updateHabit/:habitId" element={<UpdateHabit />} />
         <Route path="/deleteHabit" element={<DeleteHabit />} />
         <Route path="/selectinterests" element={<SelectInterests />} />
         {/* Pass userId and username as props to Dashboard */}

@@ -2,34 +2,33 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
-import jwt_decode from 'jwt-decode';  // Not needed anymore
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId and username as props
-    console.log('Inside Dashboard component');
-    console.log('userid',userId);
-    console.log('username',username);
+const Dashboard = ({ currentDate, userId, username }) => {
     const [frequency, setFrequency] = useState('Daily');
     const [habits, setHabits] = useState([]);
     const [goals, setGoals] = useState([]);
     const [progress, setProgress] = useState({});
+    const navigate = useNavigate();
 
-    // Fetch habits and goals whenever frequency or userId changes
     useEffect(() => {
         const fetchHabitsAndGoals = async () => {
             try {
-
                 // Fetch habits by frequency
-                const habitsResponse = await axios.get(`http://localhost:5000/api/habits/${frequency}?userId=${userId}`);
+                const habitsResponse = await axios.get(`http://localhost:5000/api/habits/${frequency}`, {
+                    params: { userId },
+                });
 
-                setHabits(habitsResponse.data);
+                setHabits(Array.isArray(habitsResponse.data) ? habitsResponse.data : []);
+                console.log('Habits API response:', habitsResponse.data);
 
                 // Fetch all habits with their goals
                 const goalsResponse = await axios.get('http://localhost:5000/api/habits/all', {
-                    params: { userId },  // Use userId directly from props
+                    params: { userId },
                 });
-                setGoals(goalsResponse.data);
-                  
+
+                setGoals(Array.isArray(goalsResponse.data) ? goalsResponse.data : []);
+                console.log('Goals API response:', goalsResponse.data);
 
                 // Initialize progress for each habit
                 const initialProgress = {};
@@ -45,24 +44,22 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
         if (userId) {
             fetchHabitsAndGoals();
         }
-    }, [frequency, userId]);  // Fetch data again when userId or frequency changes
+    }, [frequency, userId]);
 
-    // Handle checkbox state change and update progress
     const handleCheckboxChange = async (habitId) => {
         const newProgress = !progress[habitId];
 
         setProgress((prev) => ({
             ...prev,
-            [habitId]: newProgress, // Toggle progress for the habit
+            [habitId]: newProgress,
         }));
 
         try {
-            // Send updated progress to the backend
-            await axios.post('/api/habits/update-progress', {
+            await axios.post('http://localhost:5000/api/habits/update-progress', {
                 userId,
                 habitId,
                 date: currentDate,
-                progress: newProgress, // Send the updated progress
+                progress: newProgress,
             });
         } catch (error) {
             console.error('Error updating progress:', error);
@@ -73,12 +70,25 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
         setFrequency(newFrequency);
     };
 
+    const handleDeleteHabit = async (habitId) => {
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/habits/deletehabit/${habitId}`);
+            if (response.status === 200) {
+                alert('Habit Deleted Successfully');
+                setGoals((prev) => prev.filter((habit) => habit.habitId !== habitId));
+                setHabits((prev) => prev.filter((habit) => habit.habitId !== habitId));
+
+            }
+        } catch (error) {
+            console.error('Error deleting habit:', error);
+            alert('Failed to delete the habit.');
+        }
+    };
+
     return (
         <div className="dashboard-container">
-            {/* Welcome Message */}
             <div className="welcome-message">Welcome Back, {username}!</div>
 
-            {/* Frequency Options */}
             <div className="frequency-options">
                 <button onClick={() => handleFrequencyChange('Daily')}>
                     <FaCalendarAlt className="calendar-icon" /> Today
@@ -91,7 +101,6 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                 </button>
             </div>
 
-            {/* First Table */}
             <div className="habits-table-section">
                 <table className="habits-table">
                     <thead>
@@ -118,15 +127,13 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                                     />
                                 </td>
                             ))}
-                            <td>50%</td> {/* Placeholder for progress percentage */}
+                            <td>50%</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            {/* Main Content */}
             <div className="main-content">
-                {/* Habits Section - Displayed only if habits are found */}
                 {habits.length > 0 && (
                     <div className="habits-section">
                         <h3 className="habits-heading">Habits</h3>
@@ -140,7 +147,6 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                     </div>
                 )}
 
-                {/* Details Table */}
                 <div className="details-section">
                     {goals.length === 0 ? (
                         <div className="no-habits-message">
@@ -148,7 +154,6 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                         </div>
                     ) : (
                         <>
-                            {/* Table Headings outside the table */}
                             <div className="details-heading">
                                 <span>Description</span>
                                 <span>Goal</span>
@@ -159,12 +164,23 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                                 <tbody>
                                     {goals.map((goal) => (
                                         <tr key={goal.goalId}>
-                                            <td>{goal.habit.description}</td>
+                                            <td>{goal.description}</td>
                                             <td>{goal.goal}</td>
-                                            <td>60%</td> {/* Placeholder for completion rate */}
+                                            <td>60%</td>
                                             <td>
-                                                <button>Update</button>
-                                                <button>Delete</button>
+                                                <button
+                                                    className="actionButtons"
+                                                    onClick={() => navigate(`/updateHabit/${goal.habitId}`)}
+                                                >
+                                                    Update
+                                                </button>
+                                                <button
+                                                    className="actionButtons"
+                                                    onClick={() => handleDeleteHabit(goal.habitId)}
+                                                >
+                                                    Delete
+                                                </button>
+                                                <button className="actionButtons" onClick={() => navigate(`/setGoals/${goal.habitId}/${userId}`)}>Set Goals</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -180,7 +196,7 @@ const Dashboard = ({ currentDate, userId, username }) => {  // Receive userId an
                     <button>Set Goal</button>
                 </Link>
                 <Link to="/createHabit">
-                    <button>Create New Habit</button>
+                    <button onClick={() => navigate('/createHabit')}>Create New Habit</button>
                 </Link>
                 <Link to="/trackProgress">
                     <button>Track Progress</button>

@@ -58,6 +58,8 @@ const CreateHabit = () => {
       categoryId,
     };
 
+    console.log("habitData==",habitData)
+
     try {
       console.log('Sending request with data:', habitData);
 
@@ -91,6 +93,7 @@ const CreateHabit = () => {
           <div className="form-row">
             <label>Category:</label>
             <select
+              style={{color:"grey"}}
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
             >
@@ -120,7 +123,7 @@ const CreateHabit = () => {
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value)}
-              style={{ width: '370px' }}
+              style={{ width: '370px', color:'grey'}}
             >
               <option>Select</option>
               <option>Daily</option>
