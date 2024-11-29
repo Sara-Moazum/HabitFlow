@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import { User } from './User.js';
-import { Category } from './Category.js'; 
+import { Category } from './Category.js';
 
 const Habit = sequelize.define('Habit', {
     habitId: {
@@ -13,8 +13,8 @@ const Habit = sequelize.define('Habit', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: User, 
-            key: 'userId', 
+            model: User,
+            key: 'userId',
         },
     },
     habitName: {
@@ -33,8 +33,8 @@ const Habit = sequelize.define('Habit', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Category, 
-            key: 'categoryId', 
+            model: Category,
+            key: 'categoryId',
         },
     },
     startDate: {
@@ -42,13 +42,13 @@ const Habit = sequelize.define('Habit', {
         allowNull: false,
         defaultValue: Sequelize.NOW,
     },
+    nextDueDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
 }, {
     timestamps: false,
     tableName: 'habits',
 });
-
-// Setting up associations
-Habit.belongsTo(User, { foreignKey: 'userId' });  
-Habit.belongsTo(Category, { foreignKey: 'categoryId' });  
 
 export { Habit };
