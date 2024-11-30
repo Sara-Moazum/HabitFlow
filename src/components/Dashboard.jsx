@@ -166,10 +166,12 @@ const Dashboard = ({ userId, username }) => {
                                     </tr>
                                 ) : (
                                     <tr>
-                                        <td colSpan="100%">
-                                            {habits.length === 0
-                                                ? "No habits created for this frequency."
-                                                : "All habits of this frequency are completed."}
+
+                                        <td>{frequency}</td>
+                                        <td>{currentDate}</td>
+                                        <td>{overallProgress}%</td>
+                                        <td colSpan={filteredHabitsForTable.length}>
+                                            No habits created for this frequency.
                                         </td>
                                     </tr>
                                 )}
@@ -177,17 +179,18 @@ const Dashboard = ({ userId, username }) => {
                         </table>
                     </div>
 
-                    <div className="details-section">
-                        <div className="habit-list">
+                    {habits.length > 0 && (
+                        <div className="details-section">
+                            <div className="habit-list">
                             <h3>Habit</h3>
                             {habits.map((habit) => (
                                 <div key={habit.habitId} className="habit-item">
-                                    {habit.habitName}
+                                {habit.habitName}
                                 </div>
                             ))}
-                        </div>
+                            </div>
 
-                        <div className="details-table-wrapper">
+                            <div className="details-table-wrapper">
                             <div className="details-heading">
                                 <span>Description</span>
                                 <span>Goal</span>
@@ -196,26 +199,27 @@ const Dashboard = ({ userId, username }) => {
                             </div>
                             <table className="details-table">
                                 <tbody>
-                                    {habits.map((habit) => {
-                                        const goal = goals.find((g) => g.habitId === habit.habitId);
-                                        const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
+                                {habits.map((habit) => {
+                                    const goal = goals.find((g) => g.habitId === habit.habitId);
+                                    const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
 
-                                        return (
-                                            <tr key={habit.habitId}>
-                                                <td>{habit.description}</td>
-                                                <td>{goal ? goal.goal : "No goal set"}</td>
-                                                <td>{completionRate}%</td>
-                                                <td>
-                                                    <button>Update</button>
-                                                    <button>Delete</button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                                    return (
+                                    <tr key={habit.habitId}>
+                                        <td>{habit.description}</td>
+                                        <td>{goal ? goal.goal : 'No goal set'}</td>
+                                        <td>{completionRate}%</td>
+                                        <td>
+                                        <button>Update</button>
+                                        <button>Delete</button>
+                                        </td>
+                                    </tr>
+                                    );
+                                })}
                                 </tbody>
                             </table>
+                            </div>
                         </div>
-                    </div>
+                        )}
 
                     <div className="actions-section">
                         <Link to="/setGoals">
