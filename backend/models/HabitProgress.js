@@ -1,6 +1,5 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
-import { Habit } from './Habit.js'; // Import Habit model
+import { Sequelize, DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
 
 const HabitProgress = sequelize.define('HabitProgress', {
     progressId: {
@@ -11,10 +10,10 @@ const HabitProgress = sequelize.define('HabitProgress', {
     habitId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: Habit,
-            key: 'habitId',
-        },
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
     completionDate: {
         type: DataTypes.DATE,
@@ -28,8 +27,5 @@ const HabitProgress = sequelize.define('HabitProgress', {
     timestamps: false,
     tableName: 'habit_progress',
 });
-
-// Establish association with Habit model
-HabitProgress.belongsTo(Habit, { foreignKey: 'habitId' });
 
 export { HabitProgress };

@@ -123,9 +123,9 @@ const CreateHabit = () => {
               style={{ width: '370px' }}
             >
               <option>Select</option>
-              <option>Daily</option>
-              <option>Weekly</option>
-              <option>Monthly</option>
+              <option>daily</option>
+              <option>weekly</option>
+              <option>monthly</option>
             </select>
           </div>
 
