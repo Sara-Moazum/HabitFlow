@@ -3,6 +3,9 @@ import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Person, Lock } from '@mui/icons-material'; // Import Material Design icons
+import './NavBar.css'; 
+
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -55,6 +58,16 @@ function Login() {
 
   return (
     <div className="login-page">
+      <header className="navbar">
+      <div className="logo">HABITFLOW</div>
+      <nav className="nav-links">
+        <Link to="/Home">Home</Link>
+        <Link to="/Login">Login</Link>
+        <Link to="/contactUs">Contact</Link>
+        <Link to="/about">About Us</Link>
+
+      </nav>
+    </header>
       <div className="login-container">
         <div className="background-image">
           <img src="/images/login_Image.jpg" alt="Background" />

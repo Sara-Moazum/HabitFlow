@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import './TrackProgress.css';
+import './NavBar.css'; 
+import { Link } from "react-router-dom";
+
 
 const TrackProgress = () => {
   const [userId, setUserId] = useState('');
@@ -27,7 +30,6 @@ const TrackProgress = () => {
     const fetchHabits = async (frequency) => {
       setIsDataLoaded(false);
       try {
-        // Dynamically fetching habits for each frequency
         const response = await axios.get(
           `http://localhost:5000/api/habits/${frequency}?userId=${userId}`
         );
@@ -45,39 +47,92 @@ const TrackProgress = () => {
     };
 
     if (userId) {
-      // Fetch daily, weekly, and monthly habits when the page loads
       fetchHabits('daily');
       fetchHabits('weekly');
       fetchHabits('monthly');
     }
   }, [userId]);
 
-  // Calculate completion rate for each habit
-  const calculateCompletionRate = (habitProgresses) => {
-    const totalDays = habitProgresses.length;
-    const completedDays = habitProgresses.filter((entry) => entry.isCompleted).length;
-    return totalDays > 0 ? ((completedDays / totalDays) * 100).toFixed(2) : 0;
+  // Calculate streak (consecutive days)
+  const calculateStreak = (habitProgresses) => {
+    let streak = 0;
+    let maxStreak = 0;
+    
+    for (let i = habitProgresses.length - 1; i >= 0; i--) {
+      if (habitProgresses[i].isCompleted) {
+        streak++;
+        maxStreak = Math.max(streak, maxStreak);
+      } else {
+        streak = 0;
+      }
+    }
+
+    return maxStreak;
+  };
+
+  // Render progress bars for each habit (with x and y axes)
+  const renderGraph = (habitProgresses, frequency) => {
+    const axisLabels = frequency === 'daily' ? 'Days' : frequency === 'weekly' ? 'Weeks' : 'Months';
+
+    return (
+      <div className="graph-container">
+        {/* Y-Axis Label */}
+        <div className="y-axis-label">Completion Rate (%)</div>
+
+        {/* X and Y axis */}
+        <div className="axis-line x-axis"></div>
+        <div className="axis-line y-axis"></div>
+        
+        {/* Graph bars */}
+        {habitProgresses.map((progress, index) => {
+          const progressHeight = (progress.isCompleted ? 100 : 0);
+          return (
+            <div
+              key={index}
+              className="progress-bar"
+              style={{
+                height: `${progressHeight}%`, // Set bar height based on completion
+                backgroundColor: progress.isCompleted ? '#A965FF' : '#615D66',
+                border: '1px solid white' // Adding white outline to bars
+              }}
+            >
+              {/* X-Axis numbering */}
+              <div className="x-axis-number">{index + 1}</div>
+            </div>
+          );
+        })}
+
+        {/* X-Axis Label */}
+        <div className="x-axis-label">{axisLabels}</div>
+      </div>
+    );
   };
 
   return (
     <div className="track-progress-page">
+      <header className="navbar">
+        <div className="logo">HABITFLOW</div>
+        <nav className="nav-links">
+          <Link to="/Home">Home</Link>
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/trackProgress">Track Progress</Link>
+          <Link to="/logout">Logout</Link>
+
+        </nav>
+      </header>
       <main className="main-body">
         {/* Daily Section */}
         <section className="section daily">
           <h2>Daily Habits</h2>
           {isDataLoaded && habitsByFrequency.daily.map((habit) => {
-            const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
             return (
-              <div key={habit.habitId} className="graph-container">
-                <h3>{habit.habitName}</h3>
-                <div
-                  className="progress-bar"
-                  style={{
-                    width: `${completionRate}%`,
-                    backgroundColor: completionRate === 100 ? 'green' : 'red',
-                  }}
-                ></div>
-                <p>{completionRate}% completion</p>
+              <div key={habit.habitId} className="habit-container">
+                <div className="habit-name" style={{ borderColor: '#fff', backgroundColor: '#1A1A1D', textAlign: 'left' }}>
+                  <h3>{habit.habitName}</h3>
+                </div>
+                {/* Render separate graph for each habit */}
+                {renderGraph(habit.HabitProgresses, 'daily')}
+                <p>Streak Counter: {calculateStreak(habit.HabitProgresses)} days</p>
               </div>
             );
           })}
@@ -87,18 +142,14 @@ const TrackProgress = () => {
         <section className="section weekly">
           <h2>Weekly Habits</h2>
           {isDataLoaded && habitsByFrequency.weekly.map((habit) => {
-            const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
             return (
-              <div key={habit.habitId} className="graph-container">
-                <h3>{habit.habitName}</h3>
-                <div
-                  className="progress-bar"
-                  style={{
-                    width: `${completionRate}%`,
-                    backgroundColor: completionRate === 100 ? 'blue' : 'orange',
-                  }}
-                ></div>
-                <p>{completionRate}% completion</p>
+              <div key={habit.habitId} className="habit-container">
+                <div className="habit-name" style={{ borderColor: '#fff', backgroundColor: '#2E2E33', textAlign: 'left' }}>
+                  <h3>{habit.habitName}</h3>
+                </div>
+                {/* Render separate graph for each habit */}
+                {renderGraph(habit.HabitProgresses, 'weekly')}
+                <p>Streak Counter: {calculateStreak(habit.HabitProgresses)} days</p>
               </div>
             );
           })}
@@ -108,18 +159,14 @@ const TrackProgress = () => {
         <section className="section monthly">
           <h2>Monthly Habits</h2>
           {isDataLoaded && habitsByFrequency.monthly.map((habit) => {
-            const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
             return (
-              <div key={habit.habitId} className="graph-container">
-                <h3>{habit.habitName}</h3>
-                <div
-                  className="progress-bar"
-                  style={{
-                    width: `${completionRate}%`,
-                    backgroundColor: completionRate === 100 ? 'purple' : 'yellow',
-                  }}
-                ></div>
-                <p>{completionRate}% completion</p>
+              <div key={habit.habitId} className="habit-container">
+                <div className="habit-name" style={{ borderColor: '#fff', backgroundColor: '#404044', textAlign: 'left' }}>
+                  <h3>{habit.habitName}</h3>
+                </div>
+                {/* Render separate graph for each habit */}
+                {renderGraph(habit.HabitProgresses, 'monthly')}
+                <p>Streak Counter: {calculateStreak(habit.HabitProgresses)} days</p>
               </div>
             );
           })}

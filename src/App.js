@@ -18,6 +18,7 @@ import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
 import HabitSuggestions from './components/HabitSuggestions';
 import ForgetPassword from "./components/ForgetPassword";
+import Logout from "./components/Logout";
 
 function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
@@ -42,7 +43,6 @@ function App() {
 
   return (
     <>
-      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} /> {/* Default route for the home page */}
         <Route path="/home" element={<Home />} />
@@ -61,6 +61,7 @@ function App() {
         <Route path="/habitSuggestions" element={<HabitSuggestions />} />
         <Route path="/trackProgress" element={<TrackProgress />} />
         <Route path="/accountSettings" element={<AccountSettings />} />
+        <Route path="/logout" element={<AccountSettings />} />
       </Routes>
       <Footer />
     </>

@@ -3,6 +3,9 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirecting
 import './Habit.css'; // Make sure to adjust the CSS file to style the select and option
+import './NavBar.css'; 
+import { Link } from "react-router-dom";
+
 
 const CreateHabit = () => {
   const [userId, setUserId] = useState('');
@@ -85,6 +88,16 @@ const CreateHabit = () => {
 
   return (
     <div className="create-habit-container">
+      <header className="navbar">
+        <div className="logo">HABITFLOW</div>
+        <nav className="nav-links">
+          <Link to="/Home">Home</Link>
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/createHabit">Create Habit</Link>
+          <Link to="/logout">Logout</Link>
+
+        </nav>
+      </header>
       <div className="create-habit-content">
         <h2>Create Habit</h2>
         <form className="form-container" onSubmit={handleSubmit}>

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
-import { Link } from 'react-router-dom';
+import './NavBar.css'; 
+import { Link } from "react-router-dom";
+
 
 const calculateCompletionRate = (habitProgresses) => {
     const totalDays = habitProgresses.length;
@@ -107,8 +109,19 @@ const Dashboard = ({ userId, username }) => {
 
     return (
         <div className="dashboard-container">
+            
             {isDataLoaded && (
                 <>
+                     <header className="navbar">
+                        <div className="logo">HABITFLOW</div>
+                        <nav className="nav-links">
+                            <Link to="/Home">Home</Link>
+                            <Link to="/dashboard">Dashboard</Link>
+                            <Link to="/logout">Logout</Link>
+                          
+
+                        </nav>
+                    </header>
                     <div className="welcome-message">Welcome Back, {username}!</div>
                     <div className="frequency-options">
                         <button onClick={() => handleFrequencyChange('Daily')}>

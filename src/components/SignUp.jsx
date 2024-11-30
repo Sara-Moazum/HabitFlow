@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './Login.css'; 
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios for HTTP requests
+import './NavBar.css'; 
+
+
 
 function SignUp() {
   const navigate = useNavigate(); // To navigate to another page after successful signup
@@ -59,6 +62,16 @@ function SignUp() {
 
   return (
     <div className="login-page">
+      <header className="navbar">
+        <div className="logo">HABITFLOW</div>
+        <nav className="nav-links">
+          <Link to="/Home">Home</Link>
+          <Link to="/Login">Login</Link>
+          <Link to="/contactUs">Contact</Link>
+          <Link to="/about">About Us</Link>
+
+        </nav>
+      </header>
       <div className="login-container">
         <div className="background-image">
           <img src="./images/login_Image.jpg" alt="Background" />
