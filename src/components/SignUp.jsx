@@ -1,38 +1,32 @@
 import React, { useState } from 'react';
-import './Login.css'; 
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for HTTP requests
+import './Login.css';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function SignUp() {
-  const navigate = useNavigate(); // To navigate to another page after successful signup
-
-  // State for capturing form inputs
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState(''); // To handle any error message
+  const [error, setError] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(false); // Track if signup is successful
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('Please enter a valid email address');
       return;
     }
 
     try {
-      // Make POST request to the backend signup route
       await axios.post('http://localhost:5000/auth/signup', {
         firstName,
         lastName,
@@ -41,19 +35,9 @@ function SignUp() {
         password,
       });
 
-  
-      navigate('/selectinterests'); // Redirect to login page
-
-      // Reset form fields after successful signup
-      setFirstName('');
-      setLastName('');
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-
-    } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred during signup');
+      setSignupSuccess(true); // Mark signup as successful
+    } catch (err) {
+      setError(err.response?.data?.message || 'An error occurred during signup');
     }
   };
 
@@ -66,8 +50,7 @@ function SignUp() {
         <div className="login-box">
           <h2>SIGNUP</h2>
           <form onSubmit={handleSubmit}>
-          {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
-
+            {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
             <div className="input-group-signup">
               <input
                 type="text"
@@ -122,14 +105,25 @@ function SignUp() {
                 required
               />
             </div>
-
-            <button type="submit" className="login-button">Signup</button>
-
-            <div style={{ color: "black", margin: "15px" }}>
-              Already have an account? 
-              <Link to="/Login" style={{ color: "black", fontWeight: "bold" }}>Login</Link>
-            </div>
+            {!signupSuccess && (
+              <button type="submit" className="login-button">
+                Signup
+              </button>
+            )}
           </form>
+
+          {/* Conditional Link to SelectInterests */}
+          {signupSuccess && (
+            <div style={{ marginTop: '15px' }}>
+              <Link to="/selectinterests" className="login-button">
+                Continue to Select Interests
+              </Link>
+            </div>
+          )}
+
+          <div style={{ marginTop: '15px', color:'#161515' }}>
+            Already have an account? <Link to="/login">Login</Link>
+          </div>
         </div>
       </div>
     </div>

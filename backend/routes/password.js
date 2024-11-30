@@ -5,7 +5,8 @@ import { User } from '../models/User.js';
 const router = express.Router();
 
 // Utility function to validate password strength
-const validatePasswordStrength = (password) => {
+const validatePasswordStrength = (password) => 
+{
   return password.length >= 6; // Password must be at least 6 characters
 };
 
