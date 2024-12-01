@@ -36,9 +36,7 @@ const Dashboard = ({ userId, username }) => {
                 console.log('Habits API response:', habitsResponse.data);
 
                 // Fetch all goals for the user
-                const goalsResponse = await axios.get('http://localhost:5000/api/habits/all', {
-                    params: { userId },
-                });
+                const goalsResponse = await axios.get(`http://localhost:5000/api/habits/all/${userId}`);
 
                 setGoals(Array.isArray(goalsResponse.data) ? goalsResponse.data : []);
                 console.log('Goals API response:', goalsResponse.data);
@@ -204,10 +202,9 @@ const Dashboard = ({ userId, username }) => {
                                 <table className="details-table">
                                     <tbody>
                                         {goals.map((goal) => (
-                                            <tr key={goal.goalId}>
+                                            <tr key={goal.habitId}>
                                                 <td>{goal.description}</td>
-                                                <td>{goal.goal}</td>
-                                                <td>60%</td>
+                                                <td>{goal.goal ? goal.goal.goal : 'No goal set'}</td>                                                <td>60%</td>
                                                 <td>
                                                     <button
                                                         className="actionBtn"
