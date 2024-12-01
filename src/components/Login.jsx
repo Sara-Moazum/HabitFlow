@@ -34,7 +34,8 @@ function Login() {
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token); // Store token in localStorage
-        navigate('/dashboard'); // Redirect to dashboard or any default page for logged-in users
+        localStorage.setItem('userId', response.data.userId); // Store userId for future use
+        navigate('/selectinterests'); // Redirect to Select Interests page
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -84,10 +85,12 @@ function Login() {
               </label>
               <Link to="/forgetpassword">Forgot Password?</Link>
             </div>
-            <div className='account'>
+            <div className="account">
               Don't have an account? <Link to="/signup">SignUp</Link>
             </div>
-            <button type="submit" className="login-button">Login</button>
+            <button type="submit" className="login-button">
+              Login
+            </button>
           </form>
         </div>
       </div>

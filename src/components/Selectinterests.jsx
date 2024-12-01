@@ -1,10 +1,10 @@
 ﻿import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for API calls
+import jwt_decode from "jwt-decode"; // Import jwt-decode for decoding the token
 import "./SelectInterests.css";
 
 const SelectInterests = () => {
     const [selectedInterests, setSelectedInterests] = useState([]);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userId, setUserId] = useState(null);
 
     const interests = [
@@ -15,14 +15,23 @@ const SelectInterests = () => {
         "Business & Entrepreneurship"
     ];
 
-    // Check if the user is logged in and retrieve user ID when the component mounts
+    // Fetch user ID from the token when the component mounts
     useEffect(() => {
-        const storedUserId = localStorage.getItem("userId");
-        if (storedUserId) {
-            setIsLoggedIn(true);
-            setUserId(storedUserId);
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                console.log("Decoded Token:", decoded);
+                setUserId(decoded.userId); // Assuming the token contains userId
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                alert("Invalid token. Please log in again.");
+                window.location.href = "/login";
+            }
         } else {
-            setIsLoggedIn(false);
+            console.log("Token not found. Redirecting to login...");
+            alert("Please log in to continue.");
+            window.location.href = "/login";
         }
     }, []);
 
@@ -35,8 +44,8 @@ const SelectInterests = () => {
     };
 
     const handleSave = async () => {
-        if (!isLoggedIn) {
-            alert("Please log in to save your interests.");
+        if (!userId) {
+            alert("User ID not found. Please log in again.");
             return;
         }
 
@@ -46,14 +55,18 @@ const SelectInterests = () => {
         }
 
         try {
-            // Send the selected interests to the backend API
-            const response = await axios.post("http://localhost:3000/api/interests/save", {
-                userId: userId,
-                selectedInterests: selectedInterests, // Pass selected interests as an array
+            console.log("User ID:", userId);
+            console.log("Selected Interests:", selectedInterests);
+
+            const response = await axios.post("http://localhost:5000/api/interests/save", {
+                userId,
+                selectedInterests,
             });
 
             if (response.status === 201) {
                 alert("Interests saved successfully!");
+                // Redirect to the user dashboard
+                window.location.href = "/dashboard";
             } else {
                 alert("Failed to save interests. Please try again.");
             }

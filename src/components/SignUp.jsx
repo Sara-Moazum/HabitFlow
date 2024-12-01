@@ -112,14 +112,7 @@ function SignUp() {
             )}
           </form>
 
-          {/* Conditional Link to SelectInterests */}
-          {signupSuccess && (
-            <div style={{ marginTop: '15px' }}>
-              <Link to="/selectinterests" className="login-button">
-                Continue to Select Interests
-              </Link>
-            </div>
-          )}
+         
 
           <div style={{ marginTop: '15px', color:'#161515' }}>
             Already have an account? <Link to="/login">Login</Link>

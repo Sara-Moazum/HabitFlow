@@ -4,7 +4,7 @@ import {User} from "./User.js";
 import Interest from "./Interest.js";
 
 const UserInterest = sequelize.define("UserInterest", {
-    id: {
+    Id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,

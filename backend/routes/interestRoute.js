@@ -1,9 +1,13 @@
-const express = require('express');
+import express from 'express';
+import { User } from '../models/User.js'; // Ensure correct path
+import UserInterest from '../models/UserInterest.js';
+import Interest from '../models/Interest.js';
+
 const router = express.Router();
-const { User, Interest, UserInterest } = require('../models'); // Ensure correct path
+
 
 // Handle POST requests for saving interests
-router.post('/api/interests/save', async (req, res) => {
+router.post('/save', async (req, res) => {
   const { userId, selectedInterests } = req.body;
   console.log('Received userId:', userId);
   console.log('Received selectedInterests:', selectedInterests);
@@ -13,26 +17,31 @@ router.post('/api/interests/save', async (req, res) => {
   }
 
   try {
+    // Check if the user exists
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const validInterests = await Interest.findAll({
+    // Look up interest IDs from names
+    const interests = await Interest.findAll({
       where: {
-        id: selectedInterests,
+        interestName: selectedInterests, // Match interestName to the provided names
       },
+      attributes: ['interestId'], // Only fetch interestId
     });
 
-    if (validInterests.length !== selectedInterests.length) {
-      return res.status(400).json({ message: 'Some interests are invalid' });
+    if (interests.length === 0) {
+      return res.status(404).json({ message: 'No matching interests found' });
     }
 
-    const userInterests = selectedInterests.map((interestId) => ({
+    // Map interest IDs to user interests
+    const userInterests = interests.map((interest) => ({
       userId,
-      interestId,
+      interestId: interest.interestId, // Use the interestId from the lookup
     }));
 
+    // Bulk create user interests
     await UserInterest.bulkCreate(userInterests);
 
     res.status(201).json({ message: 'Interests saved successfully' });
@@ -42,4 +51,4 @@ router.post('/api/interests/save', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router; // Use export default for ES module syntax
