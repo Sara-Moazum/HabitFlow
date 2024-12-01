@@ -1,6 +1,9 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode to decode the token
+import { UserProvider } from './context/UserContext'; // Import the UserProvider from UserContext
+
 import AboutUs from './components/AboutUs';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -17,8 +20,8 @@ import Dashboard from './components/Dashboard';
 import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
 import HabitSuggestions from './components/HabitSuggestions';
-import ForgetPassword from "./components/ForgetPassword";
-import Logout from "./components/Logout";
+import ForgetPassword from './components/ForgetPassword';
+import Logout from './components/Logout'; // Add Logout from main branch
 
 function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
@@ -28,10 +31,21 @@ function App() {
     if (token) {
       try {
         const decodedToken = jwt_decode(token);
+        console.log('Decoded token:', decodedToken); // Retain logging for debugging
+
         setUser({
           userId: decodedToken.userId,
           username: decodedToken.username,
         });
+
+        // Save user to localStorage
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            userId: decodedToken.userId,
+            username: decodedToken.username,
+          })
+        );
       } catch (error) {
         console.error('Error decoding token:', error);
         setUser({ userId: '', username: '' }); // Reset user on token decode failure
@@ -39,15 +53,15 @@ function App() {
     } else {
       setUser({ userId: '', username: '' }); // Reset user if token is not available
     }
-  }, [localStorage.getItem('token')]); // Add token to the dependency array
-  
+  }, []); // Remove dependency on `localStorage.getItem('token')` to avoid reruns
 
   return (
-    <>
+    <UserProvider value={{ user, setUser }}>
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} /> {/* Default route for the home page */}
         <Route path="/home" element={<Home />} />
-        <Route path="/Login" element={<Login/>} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/about" element={<AboutUs />} />
@@ -65,7 +79,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
       </Routes>
       <Footer />
-    </>
+    </UserProvider>
   );
 }
 

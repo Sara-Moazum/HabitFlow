@@ -15,14 +15,9 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const validateEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validatePassword = (password) => {
-    return password.length >= 6;
-  };
+  const validatePassword = (password) => password.length >= 6;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,10 +33,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', {
-        email,
-        password,
-      });
+      const response = await axios.post('http://localhost:5000/auth/login', { email, password });
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token);
@@ -50,11 +42,7 @@ function Login() {
       }
       
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message || 'Login failed');
-      } else {
-        setError('Server error. Please try again later.');
-      }
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
@@ -75,14 +63,13 @@ function Login() {
           <img src="/images/login_Image.jpg" alt="Background" />
         </div>
         <div className="login-box">
-          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} /> {/* User profile icon */}
+          <Person style={{ fontSize: '60px', color: '#333' }} />
           <h2>LOGIN</h2>
 
           <form onSubmit={handleLogin}>
-            {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
-
+            {error && <div style={{ color: 'purple', marginBottom: '20px' }}>{error}</div>}
             <div className="input-group">
-              <Person style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Person icon */}
+              <Person className="icon" />
               <input
                 type="email"
                 placeholder="Email"
@@ -92,7 +79,7 @@ function Login() {
               />
             </div>
             <div className="input-group">
-              <Lock style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Lock icon */}
+              <Lock className="icon" />
               <input
                 type="password"
                 placeholder="Password"
@@ -101,7 +88,7 @@ function Login() {
                 required
               />
             </div>
-            <div className="options" style={{ margin: '20px 5px' }}>
+            <div className="options">
               <label>
                 <input
                   type="checkbox"
@@ -110,18 +97,10 @@ function Login() {
                 />{' '}
                 Remember me
               </label>
-
-
-              <a href="/forgetpassword" style={{ color: 'black' }}>
-                Forgot Password?
-              </a>
+              <Link to="/forgetpassword"style={{color:"#000000"}}>Forgot Password?</Link>
             </div>
-
-            <div style={{ color: 'black' }}>
-              Don't have an account?{' '}
-              <Link to="/signUp" style={{ color: 'black', fontWeight: 'bold' }}>
-                SignUp
-              </Link>
+            <div className="account">
+              Don't have an account? <Link to="/signup" style={{color:"#000000"}}>SignUp</Link>
             </div>
             <button type="submit" className="login-button">
               Login

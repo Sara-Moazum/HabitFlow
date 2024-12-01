@@ -21,7 +21,7 @@ const ForgetPassword = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/password/forgot-password', {
-        username, // Send `username` instead of `userId`
+        username, // Send `username` 
       });
 
       if (response.status === 200) {
