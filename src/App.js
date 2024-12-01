@@ -21,33 +21,39 @@ import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
 import HabitSuggestions from './components/HabitSuggestions';
 import ForgetPassword from './components/ForgetPassword';
+import Logout from './components/Logout'; // Add Logout from main branch
 
 function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
 
   useEffect(() => {
-    // Fetch token from localStorage
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        // Decode the JWT token to get userId and username
         const decodedToken = jwt_decode(token);
-        console.log('Decoded token:', decodedToken);
+        console.log('Decoded token:', decodedToken); // Retain logging for debugging
+
         setUser({
           userId: decodedToken.userId,
           username: decodedToken.username,
         });
 
         // Save user to localStorage
-        localStorage.setItem('user', JSON.stringify({
-          userId: decodedToken.userId,
-          username: decodedToken.username,
-        }));
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            userId: decodedToken.userId,
+            username: decodedToken.username,
+          })
+        );
       } catch (error) {
         console.error('Error decoding token:', error);
+        setUser({ userId: '', username: '' }); // Reset user on token decode failure
       }
+    } else {
+      setUser({ userId: '', username: '' }); // Reset user if token is not available
     }
-  }, []);
+  }, []); // Remove dependency on `localStorage.getItem('token')` to avoid reruns
 
   return (
     <UserProvider value={{ user, setUser }}>
@@ -55,7 +61,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> {/* Default route for the home page */}
         <Route path="/home" element={<Home />} />
-        <Route path="/Login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/about" element={<AboutUs />} />
@@ -70,6 +76,7 @@ function App() {
         <Route path="/habitSuggestions" element={<HabitSuggestions />} />
         <Route path="/trackProgress" element={<TrackProgress />} />
         <Route path="/accountSettings" element={<AccountSettings />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
       <Footer />
     </UserProvider>

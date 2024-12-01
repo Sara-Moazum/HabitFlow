@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import './Login.css';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import './Login.css'; 
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios for HTTP requests
+import './NavBar.css'; // Include NavBar styling
 
 function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -13,9 +14,12 @@ function SignUp() {
   const [error, setError] = useState('');
   const [signupSuccess, setSignupSuccess] = useState(false); // Track if signup is successful
 
+  const navigate = useNavigate(); // Add navigate to redirect to Login after successful signup
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation checks
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -27,6 +31,7 @@ function SignUp() {
     }
 
     try {
+      // Send signup request to backend
       await axios.post('http://localhost:5000/auth/signup', {
         firstName,
         lastName,
@@ -36,6 +41,12 @@ function SignUp() {
       });
 
       setSignupSuccess(true); // Mark signup as successful
+      setError(''); // Clear any existing errors
+
+      // Redirect to login page after signup
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Redirect after 2 seconds for a smooth transition
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred during signup');
     }
@@ -43,6 +54,18 @@ function SignUp() {
 
   return (
     <div className="login-page">
+      {/* NavBar */}
+      <header className="navbar">
+        <div className="logo">HABITFLOW</div>
+        <nav className="nav-links">
+          <Link to="/home">Home</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/contactUs">Contact</Link>
+          <Link to="/about">About Us</Link>
+        </nav>
+      </header>
+
+      {/* Signup Form */}
       <div className="login-container">
         <div className="background-image">
           <img src="./images/login_Image.jpg" alt="Background" />
@@ -51,6 +74,8 @@ function SignUp() {
           <h2>SIGNUP</h2>
           <form onSubmit={handleSubmit}>
             {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
+            {signupSuccess && <div style={{ color: 'green', marginBottom: '20px' }}>Signup successful! Redirecting to login...</div>}
+
             <div className="input-group-signup">
               <input
                 type="text"
@@ -112,10 +137,8 @@ function SignUp() {
             )}
           </form>
 
-         
-
-          <div style={{ marginTop: '15px', color:'#000000' }}>
-            Already have an account? <Link to="/login"style={{color:"#000000"}}>Login</Link>
+          <div style={{ marginTop: '15px', color: '#000000' }}>
+            Already have an account? <Link to="/login" style={{ color: '#000000' }}>Login</Link>
           </div>
         </div>
       </div>

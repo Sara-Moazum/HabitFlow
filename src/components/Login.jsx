@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Person, Lock } from '@mui/icons-material';
+import { Person, Lock } from '@mui/icons-material'; // Import Material Design icons
+import './NavBar.css'; // Include NavBar styling
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -35,7 +36,16 @@ function Login() {
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token); // Store token in localStorage
         localStorage.setItem('userId', response.data.userId); // Store userId for future use
-        navigate('/selectinterests'); // Redirect to Select Interests page
+
+        // Redirect based on user state
+        const hasSelectedInterests = response.data.hasSelectedInterests; // Ensure backend sends this
+        if (hasSelectedInterests) {
+          navigate('/dashboard'); // Redirect to dashboard
+        } else {
+          navigate('/selectinterests'); // Redirect to select interests
+        }
+
+        window.location.reload(); // Optional: Refresh state across components
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -44,6 +54,18 @@ function Login() {
 
   return (
     <div className="login-page">
+      {/* NavBar */}
+      <header className="navbar">
+        <div className="logo">HABITFLOW</div>
+        <nav className="nav-links">
+          <Link to="/home">Home</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/contactUs">Contact</Link>
+          <Link to="/about">About Us</Link>
+        </nav>
+      </header>
+
+      {/* Login Form */}
       <div className="login-container">
         <div className="background-image">
           <img src="/images/login_Image.jpg" alt="Background" />
@@ -83,10 +105,15 @@ function Login() {
                 />{' '}
                 Remember me
               </label>
-              <Link to="/forgetpassword"style={{color:"#000000"}}>Forgot Password?</Link>
+              <Link to="/forgetpassword" style={{ color: '#000000' }}>
+                Forgot Password?
+              </Link>
             </div>
             <div className="account">
-              Don't have an account? <Link to="/signup" style={{color:"#000000"}}>SignUp</Link>
+              Don't have an account?{' '}
+              <Link to="/signup" style={{ color: '#000000' }}>
+                SignUp
+              </Link>
             </div>
             <button type="submit" className="login-button">
               Login
