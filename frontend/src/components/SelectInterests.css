@@ -90,6 +90,7 @@ h2 {
 }
 
 .saveBtn {
+    width:20%;
     margin-top: 1rem;
     padding: 0.8rem 2.5rem;
     border: none;

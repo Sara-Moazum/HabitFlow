@@ -2,33 +2,38 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 import './Dashboard.css';
-import { Link, useNavigate } from 'react-router-dom';
+import './NavBar.css'; 
+import { Link, useNavigate } from "react-router-dom";
 
-const calculateCompletionRate = (habitId, habitProgress) => {
-    const progressData = habitProgress[habitId] || [];
-    const totalDays = progressData.length;
-    const completedDays = progressData.filter((entry) => entry.completed).length;
+
+const calculateCompletionRate = (habitProgresses) => {
+    const totalDays = habitProgresses.length;
+    const completedDays = habitProgresses.filter((entry) => entry.isCompleted).length;
     return totalDays > 0 ? ((completedDays / totalDays) * 100).toFixed(2) : 0;
 };
 
 const Dashboard = ({ userId, username }) => {
-    const [frequency, setFrequency] = useState('Daily'); // Default to 'Daily'
+    const [frequency, setFrequency] = useState('Daily');
     const [habits, setHabits] = useState([]);
     const [goals, setGoals] = useState([]);
+    const [overallProgress, setOverallProgress] = useState(0); // Track overall progress
     const [progress, setProgress] = useState({});
     const navigate = useNavigate();
     const [currentDate, setCurrentDate] = useState('');
-    const [isDataLoaded, setIsDataLoaded] = useState(false); // Track if data is loaded
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     useEffect(() => {
+        if (!userId) {
+            console.error("No userId found!");
+            return; 
+        }
         const today = new Date().toISOString().split('T')[0];
         setCurrentDate(today);
 
         const fetchHabitsAndGoals = async () => {
-            setIsDataLoaded(false); // Set loading state before fetching new data
+            setIsDataLoaded(false);
 
             try {
-                // Fetch habits for the selected frequency
                 const habitsResponse = await axios.get(
                     `http://localhost:5000/api/habits/${frequency}?userId=${userId}`
                 );
@@ -52,35 +57,41 @@ const Dashboard = ({ userId, username }) => {
                 console.error('Error fetching habits and goals:', error);
             }
 
-            setIsDataLoaded(true); // Set to true once data is loaded
+            setIsDataLoaded(true);
         };
 
-        if (userId) {
-            fetchHabitsAndGoals();
-        }    }, [frequency, userId]); 
+        fetchHabitsAndGoals();
+    }, [frequency, userId]);
+
+    const calculateOverallProgress = (habitsData) => {
+        let totalDays = 0;
+        let completedDays = 0;
+
+        habitsData.forEach((habit) => {
+            const habitProgresses = habit.HabitProgresses || [];
+            totalDays += habitProgresses.length;
+            completedDays += habitProgresses.filter((entry) => entry.isCompleted).length;
+        });
+
+        const progress = totalDays > 0 ? ((completedDays / totalDays) * 100).toFixed(2) : 0;
+        setOverallProgress(progress);
+    };
 
     const handleCheckboxChange = async (habitId) => {
-        const newProgress = progress[habitId] || [];
-        const habitAlreadyCompleted = newProgress.some((entry) => entry.completed);
-
-        if (!habitAlreadyCompleted) {
-            newProgress.push({ date: currentDate, completed: true });
-        } else {
-            newProgress.push({ date: currentDate, completed: false });
-        }
-
-        setProgress((prev) => ({
-            ...prev,
-            [habitId]: newProgress,
-        }));
-
         try {
             await axios.post('http://localhost:5000/api/habits/update-progress', {
                 userId,
                 habitId,
                 date: currentDate,
-                progress: !habitAlreadyCompleted,
+                progress: true, // Mark as completed
             });
+
+            // Refetch habits to update the UI
+            const habitsResponse = await axios.get(
+                `http://localhost:5000/api/habits/${frequency}?userId=${userId}`
+            );
+            setHabits(habitsResponse.data);
+            calculateOverallProgress(habitsResponse.data);
         } catch (error) {
             console.error('Error updating progress:', error);
         }
@@ -104,21 +115,35 @@ const Dashboard = ({ userId, username }) => {
         }
     };
 
-    // Filter habits that are not marked as completed for the first table
     const filteredHabitsForTable = habits.filter((habit) => {
-        const habitProgressData = progress[habit.habitId] || [];
-        const completed = habitProgressData.some((entry) => entry.completed);
-        return !completed; // Only show habits that are not marked as completed
+        const sortedProgress = [...habit.HabitProgresses].sort(
+            (a, b) => new Date(b.completionDate) - new Date(a.completionDate)
+        );
+
+        const latestProgress = sortedProgress[0];
+        if (latestProgress && latestProgress.isCompleted) {
+            return false;
+        }
+
+        return true;
     });
 
     return (
         <div className="dashboard-container">
-            {/* Only render content when data is fully loaded */}
+            
             {isDataLoaded && (
                 <>
-                    <div className="welcome-message">Welcome Back, {username}!</div>
+                     <header className="navbar">
+                        <div className="logo">HABITFLOW</div>
+                        <nav className="nav-links">
+                            <Link to="/Home">Home</Link>
+                            <Link to="/dashboard">Dashboard</Link>
+                            <Link to="/logout">Logout</Link>
+                          
 
-                    {/* Frequency Options */}
+                        </nav>
+                    </header>
+                    <div className="welcome-message">Welcome Back, {username}!</div>
                     <div className="frequency-options">
                         <button onClick={() => handleFrequencyChange('Daily')}>
                             <FaCalendarAlt className="calendar-icon" /> Today
@@ -131,7 +156,6 @@ const Dashboard = ({ userId, username }) => {
                         </button>
                     </div>
 
-                    {/* Habit Tracking Table (First Table) */}
                     <div className="habits-table-section">
                         <table className="habits-table">
                             <thead>
@@ -145,7 +169,7 @@ const Dashboard = ({ userId, username }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredHabitsForTable.length > 0 ? (
+                                {habits.length > 0 ? (
                                     <tr>
                                         <td>{frequency}</td>
                                         <td>{currentDate}</td>
@@ -154,18 +178,22 @@ const Dashboard = ({ userId, username }) => {
                                                 <input
                                                     type="checkbox"
                                                     className="custom-checkbox"
-                                                    checked={progress[habit.habitId]?.some((entry) => entry.completed) || false}
+                                                    checked={false}
                                                     onChange={() => handleCheckboxChange(habit.habitId)}
                                                 />
                                             </td>
                                         ))}
-                                        <td>50%</td>
+                                        <td>{overallProgress}%</td>
                                     </tr>
                                 ) : (
                                     <tr>
+
                                         <td>{frequency}</td>
                                         <td>{currentDate}</td>
-                                        <td colSpan={filteredHabitsForTable.length + 1}>No habit of chosen frequency created.</td>
+                                        <td>{overallProgress}%</td>
+                                        <td colSpan={filteredHabitsForTable.length}>
+                                            No habits created for this frequency.
+                                        </td>
                                     </tr>
                                 )}
                             </tbody>
@@ -233,7 +261,6 @@ const Dashboard = ({ userId, username }) => {
                         )}
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="actions-section">
                         <Link to="/setGoals">
                             <button>Set Goal</button>
