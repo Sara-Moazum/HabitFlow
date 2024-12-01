@@ -6,16 +6,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div>
-      <header className="navbar">
-          <div className="logo">HABITFLOW</div>
-          <nav className="nav-links">
-            <Link to="/Home">Home</Link>
-            <Link to="/Login">Login</Link>
-            <Link to="/contactUs">Contact</Link>
-            <Link to="/about">About Us</Link>
-
-          </nav>
-        </header>
+     
       
       <div className="home-container">
         {/* Left Content Box */}
