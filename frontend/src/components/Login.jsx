@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Person, Lock } from '@mui/icons-material'; // Import Material Design icons
+import { Person, Lock } from '@mui/icons-material';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,6 +11,16 @@ function Login() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+
+  // Fetch remembered data on component mount
+  useEffect(() => {
+    const rememberData = JSON.parse(localStorage.getItem('rememberMe'));
+    if (rememberData) {
+      setEmail(rememberData.email || '');
+      setPassword(rememberData.password || '');
+      setRememberMe(true);
+    }
+  }, []);
 
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -42,6 +52,17 @@ function Login() {
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token); // Store token in localStorage
+
+        // Save rememberMe data
+        if (rememberMe) {
+          localStorage.setItem(
+            'rememberMe',
+            JSON.stringify({ email, password })
+          );
+        } else {
+          localStorage.removeItem('rememberMe');
+        }
+
         navigate('/dashboard'); // Redirect to dashboard
       }
     } catch (err) {
@@ -60,14 +81,22 @@ function Login() {
           <img src="/images/login_Image.jpg" alt="Background" />
         </div>
         <div className="login-box">
-          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} /> {/* User profile icon */}
+          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} />
           <h2>LOGIN</h2>
 
           <form onSubmit={handleLogin}>
             {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
 
             <div className="input-group">
-              <Person style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Person icon */}
+              <Person
+                style={{
+                  position: 'absolute',
+                  left: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#ccc',
+                }}
+              />
               <input
                 type="email"
                 placeholder="Email"
@@ -77,7 +106,15 @@ function Login() {
               />
             </div>
             <div className="input-group">
-              <Lock style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc' }} /> {/* Lock icon */}
+              <Lock
+                style={{
+                  position: 'absolute',
+                  left: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#ccc',
+                }}
+              />
               <input
                 type="password"
                 placeholder="Password"
@@ -96,8 +133,7 @@ function Login() {
                 Remember me
               </label>
 
-
-              <a href="/forgetpassword" style={{ color: 'black' }}>
+              <a href="#forgot-password" style={{ color: 'black' }}>
                 Forgot Password?
               </a>
             </div>
