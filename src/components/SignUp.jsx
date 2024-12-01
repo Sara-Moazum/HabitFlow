@@ -114,8 +114,8 @@ function SignUp() {
 
          
 
-          <div style={{ marginTop: '15px', color:'#161515' }}>
-            Already have an account? <Link to="/login">Login</Link>
+          <div style={{ marginTop: '15px', color:'#000000' }}>
+            Already have an account? <Link to="/login"style={{color:"#000000"}}>Login</Link>
           </div>
         </div>
       </div>

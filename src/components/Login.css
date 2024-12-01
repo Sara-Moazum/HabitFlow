@@ -26,6 +26,30 @@ body {
   opacity: 0.3;
 }
 
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+  text-align: left;
+  width: 285px;
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px 8px 8px 40px; /* Adjust padding to make space for the icon */
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #000;
+  color: #fff;
+}
+
 .login-page {
   display: flex;
   flex-direction: column;

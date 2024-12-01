@@ -49,7 +49,7 @@ function Login() {
           <img src="/images/login_Image.jpg" alt="Background" />
         </div>
         <div className="login-box">
-          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} />
+          <Person style={{ fontSize: '60px', color: '#333' }} />
           <h2>LOGIN</h2>
 
           <form onSubmit={handleLogin}>
@@ -83,10 +83,10 @@ function Login() {
                 />{' '}
                 Remember me
               </label>
-              <Link to="/forgetpassword">Forgot Password?</Link>
+              <Link to="/forgetpassword"style={{color:"#000000"}}>Forgot Password?</Link>
             </div>
             <div className="account">
-              Don't have an account? <Link to="/signup">SignUp</Link>
+              Don't have an account? <Link to="/signup" style={{color:"#000000"}}>SignUp</Link>
             </div>
             <button type="submit" className="login-button">
               Login
