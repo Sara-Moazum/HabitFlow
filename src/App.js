@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode to decode the token
 import { UserProvider } from './context/UserContext'; // Import the UserProvider from UserContext
-
 import AboutUs from './components/AboutUs';
 import Home from './components/Home';
 import Login from './components/Login';

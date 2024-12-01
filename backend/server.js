@@ -8,7 +8,7 @@ import authRoutes from './routes/auth.js';
 import habitsRoutes from './routes/Habits.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import passwordRoutes from './routes/password.js';  
-
+import interestRoutes from "./routes/interestRoute.js"
 // Initialize the app
 const app = express();
 
