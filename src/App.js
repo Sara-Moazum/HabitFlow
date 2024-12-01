@@ -24,22 +24,23 @@ function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
 
   useEffect(() => {
-    // Fetch token from localStorage
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        // Decode the JWT token to get userId and username
         const decodedToken = jwt_decode(token);
-        console.log('token is',decodedToken);
         setUser({
           userId: decodedToken.userId,
           username: decodedToken.username,
         });
       } catch (error) {
         console.error('Error decoding token:', error);
+        setUser({ userId: '', username: '' }); // Reset user on token decode failure
       }
+    } else {
+      setUser({ userId: '', username: '' }); // Reset user if token is not available
     }
-  }, []);
+  }, [localStorage.getItem('token')]); // Add token to the dependency array
+  
 
   return (
     <>
@@ -61,7 +62,7 @@ function App() {
         <Route path="/habitSuggestions" element={<HabitSuggestions />} />
         <Route path="/trackProgress" element={<TrackProgress />} />
         <Route path="/accountSettings" element={<AccountSettings />} />
-        <Route path="/logout" element={<AccountSettings />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
       <Footer />
     </>

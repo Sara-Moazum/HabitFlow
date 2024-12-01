@@ -44,9 +44,11 @@ function Login() {
       });
 
       if (response.status === 200) {
-        localStorage.setItem('token', response.data.token); // Store token in localStorage
+        localStorage.setItem('token', response.data.token);
         navigate('/dashboard'); // Redirect to dashboard
+        window.location.reload(); // Refresh state across components
       }
+      
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message || 'Login failed');
