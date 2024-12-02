@@ -29,8 +29,7 @@ const SetGoals = () => {
     try {
       const response = await axios.post(`http://localhost:5000/api/habits/setGoal/${habitId}/${userId}`,{
         goal: formData.goal,
-        progressTrack: formData.progressTrack,
-        startDate: formData.startDate,
+        progressTrack: formData.progressTrack
       });
       setMessage('Goal set successfully!');
       alert("Goal set successfully!");
@@ -67,17 +66,6 @@ const SetGoals = () => {
               name="progressTrack"
               placeholder="Enter days to track"
               value={formData.progressTrack}
-              onChange={handleInputChange}
-              style={{ width: '300px' }}
-            />
-          </div>
-
-          <div className="form-row">
-            <label>Start Date:</label>
-            <input
-              type="date"
-              name="startDate"
-              value={formData.startDate}
               onChange={handleInputChange}
               style={{ width: '300px' }}
             />

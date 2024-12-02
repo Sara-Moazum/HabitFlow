@@ -15,10 +15,8 @@ const calculateCompletionRate = (habitProgresses) => {
 const Dashboard = ({ userId, username }) => {
     const [frequency, setFrequency] = useState('Daily');
     const [habits, setHabits] = useState([]);
-    const [goals, setGoals] = useState([]);
-    const [overallProgress, setOverallProgress] = useState(0); // Track overall progress
-    const [progress, setProgress] = useState({});
     const navigate = useNavigate();
+    const [overallProgress, setOverallProgress] = useState(0); // Track overall progress
     const [currentDate, setCurrentDate] = useState('');
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -37,21 +35,9 @@ const Dashboard = ({ userId, username }) => {
                 const habitsResponse = await axios.get(
                     `http://localhost:5000/api/habits/${frequency}?userId=${userId}`
                 );
-                setHabits(Array.isArray(habitsResponse.data) ? habitsResponse.data : []);
-                console.log('Habits API response:', habitsResponse.data);
+                setHabits(habitsResponse.data);
 
-                // Fetch all goals for the user
-                const goalsResponse = await axios.get(`http://localhost:5000/api/habits/all/${userId}`);
-
-                setGoals(Array.isArray(goalsResponse.data) ? goalsResponse.data : []);
-                console.log('Goals API response:', goalsResponse.data);
-
-                // Initialize progress for each habit
-                const initialProgress = {};
-                habitsResponse.data.forEach((habit) => {
-                    initialProgress[habit.habitId] = []; // Initialize progress state
-                });
-                setProgress(initialProgress); // Set progress state
+                calculateOverallProgress(habitsResponse.data);
 
             } catch (error) {
                 console.error('Error fetching habits and goals:', error);
@@ -98,7 +84,7 @@ const Dashboard = ({ userId, username }) => {
     };
 
     const handleFrequencyChange = (newFrequency) => {
-        setFrequency(newFrequency); // Update frequency
+        setFrequency(newFrequency);
     };
 
     const handleDeleteHabit = async (habitId) => {
@@ -106,7 +92,7 @@ const Dashboard = ({ userId, username }) => {
             const response = await axios.delete(`http://localhost:5000/api/habits/deletehabit/${habitId}`);
             if (response.status === 200) {
                 alert('Habit Deleted Successfully');
-                setGoals((prev) => prev.filter((habit) => habit.habitId !== habitId));
+                //setGoals((prev) => prev.filter((habit) => habit.habitId !== habitId));
                 setHabits((prev) => prev.filter((habit) => habit.habitId !== habitId));
             }
         } catch (error) {
@@ -200,71 +186,65 @@ const Dashboard = ({ userId, username }) => {
                         </table>
                     </div>
 
-                    {/* Habit List and Details Table (Second Table) */}
-                    <div className="details-section">
-                        {habits.length > 0 && (
-                            <div className="habits-section">
-                                <h3 className="habits-heading">Habits</h3>
-                                <div className="habit-list">
-                                    {habits.map((habit) => (
-                                        <div key={habit.habitId} className="habit-item">
-                                            {habit.habitName}
-                                        </div>
-                                    ))}
+                    {habits.length > 0 && (
+                        <div className="details-section">
+                            <div className="habit-list">
+                            <h3>Habit</h3>
+                            {habits.map((habit) => (
+                                <div key={habit.habitId} className="habit-item">
+                                {habit.habitName}
                                 </div>
+                            ))}
                             </div>
-                        )}
 
-                        {goals.length === 0 ? (
-                            <div className="no-habits-message">
-                                <p>No habits found. Create a new habit to get started!</p>
-                            </div>
-                        ) : (
                             <div className="details-table-wrapper">
-                                <div className="details-heading">
-                                    <span>Description</span>
-                                    <span>Goal</span>
-                                    <span>Completion Rate</span>
-                                    <span>Actions</span>
-                                </div>
-                                <table className="details-table">
-                                    <tbody>
-                                        {goals.map((goal) => (
-                                            <tr key={goal.habitId}>
-                                                <td>{goal.description}</td>
-                                                <td>{goal.goal ? goal.goal.goal : 'No goal set'}</td>                                                <td>60%</td>
-                                                <td>
-                                                    <button
-                                                        className="actionBtn"
-                                                        onClick={() => navigate(`/updateHabit/${goal.habitId}`)}
-                                                    >
-                                                        Update
-                                                    </button>
-                                                    <button
-                                                        className="actionBtn"
-                                                        onClick={() => handleDeleteHabit(goal.habitId)}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                    <button
-                                                        className="actionBtn"
-                                                        onClick={() => navigate(`/setGoals/${goal.habitId}/${userId}`)}
-                                                    >
-                                                        Set Goals
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                            <div className="details-heading">
+                                <span>Description</span>
+                                <span>Goal</span>
+                                <span>Completion Rate</span>
+                                <span>Actions</span>
                             </div>
+                            <table className="details-table">
+                                <tbody>
+                                {habits.map((habit) => {
+                                    //const goal = goals.find((g) => g.habitId === habit.habitId);
+                                    const completionRate = calculateCompletionRate(habit.HabitProgresses || []);
+
+                                    return (
+                                    <tr key={habit.habitId}>
+                                        <td>{habit.description}</td>
+                                        <td>{habit.Goal ? habit.Goal.goal : 'No goal set'}</td>
+                                        <td>{completionRate}%</td>
+                                        <td>
+                                            <button
+                                                className="actionBtn"
+                                                onClick={() => navigate(`/updateHabit/${habit.habitId}`)}
+                                            >
+                                                Update
+                                            </button>
+                                            <button
+                                                className="actionBtn"
+                                                onClick={() => handleDeleteHabit(habit.habitId)}
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                className="actionBtn"
+                                                onClick={() => navigate(`/setGoals/${habit.habitId}/${userId}`)}
+                                            >
+                                                Set Goals
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    );
+                                })}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
                         )}
-                    </div>
 
                     <div className="actions-section">
-                        <Link to="/setGoals">
-                            <button>Set Goal</button>
-                        </Link>
                         <Link to="/createHabit">
                             <button>Create New Habit</button>
                         </Link>

@@ -56,7 +56,7 @@ function App() {
 
   return (
     <UserProvider value={{ user, setUser }}>
-      <NavBar />
+   
       <Routes>
         <Route path="/" element={<Home />} /> {/* Default route for the home page */}
         <Route path="/home" element={<Home />} />

@@ -61,7 +61,8 @@ CREATE TABLE goals (
     startDate DATE NOT NULL,  -- Goal start date
     numberOfDaysToTrack INT NOT NULL,  -- Duration of the goal in days
     FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
-    FOREIGN KEY (habitId) REFERENCES habits(habitId) ON DELETE CASCADE
+    FOREIGN KEY (habitId) REFERENCES habits(habitId) ON DELETE CASCADE,
+    constraint unique_goal unique (userId,habitId)
 );
 
 -- Habit Progress Table (no changes)
