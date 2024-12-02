@@ -77,12 +77,23 @@ function Login() {
 
   return (
     <div className="login-page">
+      
       <div className="login-container">
+      <header className="navbar">
+      <div className="logo">HABITFLOW</div>
+      <nav className="nav-links">
+        <Link to="/Home">Home</Link>
+        <Link to="/Login">Login</Link>
+        <Link to="/contactUs">Contact</Link>
+        <Link to="/about">About Us</Link>
+
+      </nav>
+    </header>
         <div className="background-image">
           <img src="/images/login_Image.jpg" alt="Background" />
         </div>
         <div className="login-box">
-          <Person style={{ fontSize: '60px', color: '#333', marginBottom: '20px' }} />
+         
           <h2>LOGIN</h2>
 
 
@@ -125,10 +136,10 @@ function Login() {
                 />{' '}
                 Remember me
               </label>
-              <Link to="/forgetpassword">Forgot Password?</Link>
+              <Link to="/forgetpassword"  style={{color:'#000000'}}>Forgot Password?</Link>
             </div>
             <div className="account">
-              Don't have an account? <Link to="/signup">SignUp</Link>
+              Don't have an account? <Link to="/signup" style={{color:'#000000'}}>SignUp</Link>
             </div>
             <button type="submit" className="login-button">
               Login

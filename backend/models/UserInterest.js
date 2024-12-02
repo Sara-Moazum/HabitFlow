@@ -13,7 +13,7 @@ const UserInterest = sequelize.define("UserInterest", {
         type: DataTypes.INTEGER,
         references: {
             model: User,
-            key: "id",
+            key: "userId",
         },
         allowNull: false,
     },
@@ -21,7 +21,7 @@ const UserInterest = sequelize.define("UserInterest", {
         type: DataTypes.INTEGER,
         references: {
             model: Interest,
-            key: "id",
+            key: "interestId",
         },
         allowNull: false,
     },

@@ -55,7 +55,16 @@ function SignUp() {
   return (
     <div className="login-page">
 
+<header className="navbar">
+      <div className="logo">HABITFLOW</div>
+      <nav className="nav-links">
+        <Link to="/Home">Home</Link>
+        <Link to="/Login">Login</Link>
+        <Link to="/contactUs">Contact</Link>
+        <Link to="/about">About Us</Link>
 
+      </nav>
+    </header>
       {/* Signup Form */}
       <div className="login-container">
         <div className="background-image">

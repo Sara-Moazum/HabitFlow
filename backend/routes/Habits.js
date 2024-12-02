@@ -5,7 +5,6 @@ import { Goal } from '../models/Goal.js';
 import { Sequelize } from 'sequelize';  // <-- Import Sequelize here
 
 const router = express.Router();
-
 router.get('/:frequency', async (req, res) => {
   const { userId } = req.query;
   const { frequency } = req.params;
@@ -25,19 +24,22 @@ router.get('/:frequency', async (req, res) => {
           attributes: ['progressId', 'isCompleted', 'completionDate'],
           required: false, // Include habits even if no progress exists
         },
+        {
+          model: Goal, // Include Goal model
+          where: { userId }, // Ensure goal belongs to the same user
+          attributes: ['goalId', 'goal'], // Adjust 'goal' to match the actual field in your Goal model
+          required: false, // Include habits even if no goal exists
+        }
       ],
-    });    
-    
+    });
 
-    console.log('Habits with progress:', habits);
-
-    // Return the habits with their latest progress
-    return res.status(200).json(habits);
+    res.status(200).json(habits);
   } catch (error) {
-    console.error('Error fetching habits:', error);
-    return res.status(500).json({ message: 'Failed to fetch habits.' });
+    console.error('Error fetching habits and goals:', error);
+    res.status(500).json({ message: 'Error fetching habits and goals' });
   }
 });
+
 
 
 
@@ -152,49 +154,26 @@ router.post('/update-progress', async (req, res) => {
   }
 });
 
-router.get('/all/:userId', async (req, res) => {
-  const { userId } = req.params;
-  console.log("userId =", userId);
+// Get all habits for a user, along with their associated goal
+// Get all habits for a user, along with their associated goal
+router.get('/all', async (req, res) => {
+  const { userId } = req.query;
 
   try {
-    // Fetch all habits for the user
-    const habits = await Habit.findAll({
-      where: { userId },
-      attributes: ['habitId', 'habitName', 'description', 'frequency', 'startDate'],
-    });
-    console.log("✅🚀✅ habits=", habits);
+      const habitsWithGoals = await Habit.findAll({
+          where: { userId },
+          include: [{
+              model: Goal,
+              required: false, // Not all habits will have a goal
+          }],
+          attributes: ['habitId', 'habitName', 'description', 'frequency', 'startDate'],
+      });
 
-    if (habits.length === 0) {
-      return res.status(200).json({ message: 'No habits found for this user.' });
-    }
-
-    const habitIds = habits.map(habit => habit.habitId);
-    const goals = await Goal.findAll({
-      where: {
-        habitId: habitIds,
-        userId,
-      },
-      attributes: ['goalId', 'habitId', 'startDate', 'numberOfDaysToTrack', 'goal'],
-    });
-
-    console.log("🚀Goals==", goals);
-
-    const goalsMap = {};
-    goals.forEach(goal => {
-      goalsMap[goal.habitId] = goal;
-    });
-
-    const habitsWithGoals = habits.map(habit => ({
-      ...habit.toJSON(), 
-      goal: goalsMap[habit.habitId] ? goalsMap[habit.habitId].toJSON() : null, 
-    }));
-
-    console.log("🚀🚀🚀Habit with goals==", habitsWithGoals);
-
-    return res.status(200).json(habitsWithGoals);
+      // Return an array even if no habits exist
+      return res.status(200).json(habitsWithGoals || []);
   } catch (error) {
-    console.error('Error fetching habits with goals:', error);
-    return res.status(500).json({ message: 'Failed to fetch habits with goals.' });
+      console.error('Error fetching habits with goals:', error);
+      return res.status(500).json({ message: 'Failed to fetch habits with goals.' });
   }
 });
 
@@ -315,14 +294,15 @@ router.delete('/deletehabit/:habitId', async (req, res) => {
 router.post('/setGoal/:habitId/:userId', async (req, res) => {
   const {habitId, userId}  = req.params
   console.log("habiId==",habitId)
-  const { goal, progressTrack, startDate} = req.body;
+  const { goal, progressTrack} = req.body;
+  const startDateObj = new Date(); 
 
   try {
     const newGoal = await Goal.create({
       userId,
       habitId,
       goal,
-      startDate,
+      startDate:startDateObj,
       numberOfDaysToTrack: progressTrack
     });
     return res.status(201).json(newGoal);
