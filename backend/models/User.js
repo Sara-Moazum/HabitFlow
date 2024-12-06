@@ -38,6 +38,11 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: true, 
     },
+    hasSelectedInterests: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      
 }, {
     timestamps: false,
     tableName: 'users',

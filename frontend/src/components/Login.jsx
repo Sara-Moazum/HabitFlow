@@ -1,21 +1,16 @@
-//login .jsx
-import React, { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Person, Lock } from '@mui/icons-material';
-
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
-
-
   const navigate = useNavigate();
 
-  // Fetch remembered data on component mount
   useEffect(() => {
     const rememberData = JSON.parse(localStorage.getItem('rememberMe'));
     if (rememberData) {
@@ -25,49 +20,37 @@ function Login() {
     }
   }, []);
 
-  const validateEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
+  const validateEmail = (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
   const validatePassword = (password) => password.length >= 6;
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
 
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
     }
 
-
     if (!validatePassword(password)) {
       setError('Password must be at least 6 characters long');
       return;
     }
 
-
     try {
       const response = await axios.post('http://localhost:5000/auth/login', { email, password });
-
-
       if (response.status === 200) {
-        localStorage.setItem('token', response.data.token); // Store token in localStorage
-        localStorage.setItem('userId', response.data.userId); // Store userId for future use
+        const { token, userId, hasSelectedInterests } = response.data;
 
-        // Save rememberMe data
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
+
         if (rememberMe) {
-          localStorage.setItem(
-            'rememberMe',
-            JSON.stringify({ email, password })
-          );
+          localStorage.setItem('rememberMe', JSON.stringify({ email, password }));
         } else {
           localStorage.removeItem('rememberMe');
         }
 
-        navigate('/selectinterests'); // Redirect to Select Interests page
+        navigate(hasSelectedInterests ? '/dashboard' : '/selectinterests');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');

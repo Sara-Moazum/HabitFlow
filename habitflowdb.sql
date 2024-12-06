@@ -14,6 +14,9 @@ CREATE TABLE users (
     lastLogin TIMESTAMP NULL
 );
 
+ALTER TABLE `users`
+ADD COLUMN `hasSelectedInterests` BOOLEAN NOT NULL DEFAULT FALSE;
+
 -- Interests Table (no changes)
 CREATE TABLE interests (
     interestId INT AUTO_INCREMENT PRIMARY KEY,
