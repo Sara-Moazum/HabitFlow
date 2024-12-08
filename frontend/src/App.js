@@ -18,14 +18,14 @@ import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
 import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
-import HabitSuggestions from './components/HabitSuggestions';
+import Suggestion from './components/HabitSuggestions';
 import ForgetPassword from './components/ForgetPassword';
 import Logout from './components/Logout'; // Add Logout from main branch
 
 function App() {
   const [user, setUser] = useState({ userId: '', username: '' });
 
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -52,7 +52,24 @@ function App() {
     } else {
       setUser({ userId: '', username: '' }); // Reset user if token is not available
     }
-  }, []); // Remove dependency on `localStorage.getItem('token')` to avoid reruns
+  }*/
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwt_decode(token);
+        setUser({
+          userId: decodedToken.userId,
+          username: decodedToken.username,
+        });
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        setUser({ userId: '', username: '' }); // Reset user on token decode failure
+      }
+    } else {
+      setUser({ userId: '', username: '' }); // Reset user if token is not available
+    }
+  }, [localStorage.getItem('token')]); // Add token to the dependency array, []); // Remove dependency on `localStorage.getItem('token')` to avoid reruns
 
   return (
     <UserProvider value={{ user, setUser }}>
@@ -72,7 +89,7 @@ function App() {
         <Route path="/selectinterests" element={<SelectInterests />} />
         {/* Pass userId and username as props to Dashboard */}
         <Route path="/dashboard" element={<Dashboard userId={user.userId} username={user.username} />} />
-        <Route path="/habitSuggestions" element={<HabitSuggestions />} />
+        <Route path="/habitSuggestions" element={<Suggestion />} />
         <Route path="/trackProgress" element={<TrackProgress />} />
         <Route path="/accountSettings" element={<AccountSettings />} />
         <Route path="/logout" element={<Logout />} />

@@ -10,7 +10,8 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import passwordRoutes from './routes/password.js';  
 import interestRoutes from "./routes/interestRoute.js"
 // Initialize the app
-import contactRoutes from "./routes/contactFeedback.js"
+import contactRoutes from "./routes/contactFeedback.js";
+import accountsettting from "./routes/accountSetting.js";
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use('/api/password', passwordRoutes);
 app.use("/api/interests", interestRoutes);
 app.use('/api/habits', habitsRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/contact', contactRoutes)
+app.use('/api/contact', contactRoutes);
+app.use('/api/account-setting',accountsettting);
 
 // Start the server
 const PORT = 5000;

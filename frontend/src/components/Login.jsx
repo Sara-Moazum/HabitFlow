@@ -39,10 +39,10 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:5000/auth/login', { email, password });
       if (response.status === 200) {
-        const { token, userId, hasSelectedInterests } = response.data;
+        const { token, hasSelectedInterests } = response.data;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', userId);
+       // localStorage.setItem('userId', userId);
 
         if (rememberMe) {
           localStorage.setItem('rememberMe', JSON.stringify({ email, password }));
@@ -50,7 +50,9 @@ function Login() {
           localStorage.removeItem('rememberMe');
         }
 
+
         navigate(hasSelectedInterests ? '/dashboard' : '/selectinterests');
+        window.location.reload();
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
