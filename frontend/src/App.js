@@ -18,7 +18,7 @@ import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
 import TrackProgress from './components/TrackProgress';
 import AccountSettings from './components/AccountSettings';
-import Suggestion from './components/HabitSuggestions';
+import HabitSuggestions from './components/HabitSuggestions';
 import ForgetPassword from './components/ForgetPassword';
 import Logout from './components/Logout'; // Add Logout from main branch
 
@@ -89,7 +89,7 @@ function App() {
         <Route path="/selectinterests" element={<SelectInterests />} />
         {/* Pass userId and username as props to Dashboard */}
         <Route path="/dashboard" element={<Dashboard userId={user.userId} username={user.username} />} />
-        <Route path="/habitSuggestions" element={<Suggestion />} />
+        <Route path="/HabitSuggestions" element={<HabitSuggestions />} />
         <Route path="/trackProgress" element={<TrackProgress />} />
         <Route path="/accountSettings" element={<AccountSettings />} />
         <Route path="/logout" element={<Logout />} />

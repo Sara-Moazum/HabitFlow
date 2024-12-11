@@ -251,7 +251,7 @@ const Dashboard = ({ userId, username }) => {
                         <Link to="/trackProgress">
                             <button>Track Progress</button>
                         </Link>
-                        <Link to="/habitSuggestions">
+                        <Link to="/HabitSuggestions">
                             <button>Habit Suggestions</button>
                         </Link>
                         <Link to="/accountSettings">

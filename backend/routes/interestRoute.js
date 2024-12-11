@@ -1,7 +1,7 @@
 import express from 'express';
 import { User } from '../models/User.js'; // Ensure correct path
-import UserInterest from '../models/UserInterest.js';
-import Interest from '../models/Interest.js';
+import {UserInterest }from '../models/UserInterest.js';
+import {Interest }from '../models/Interest.js';
 
 const router = express.Router();
 

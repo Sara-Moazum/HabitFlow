@@ -21,7 +21,7 @@ const Interest = sequelize.define(
     }
   );
   
-  export default Interest;
+  export {Interest};
   
 
 

@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import {User} from "./User.js";
-import Interest from "./Interest.js";
+import {Interest} from "./Interest.js";
 
 const UserInterest = sequelize.define("UserInterest", {
     Id: {
@@ -33,8 +33,6 @@ const UserInterest = sequelize.define("UserInterest", {
 }
 );
 
-// Associations
-User.belongsToMany(Interest, { through: UserInterest });
-Interest.belongsToMany(User, { through: UserInterest });
 
-export default UserInterest;
+
+export {UserInterest};

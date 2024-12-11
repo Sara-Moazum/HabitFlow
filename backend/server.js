@@ -12,7 +12,7 @@ import interestRoutes from "./routes/interestRoute.js"
 // Initialize the app
 import contactRoutes from "./routes/contactFeedback.js";
 import accountsettting from "./routes/accountSetting.js";
-
+import suggestions from "./routes/suggestroute.js";
 const app = express();
 
 // Middleware setup
@@ -29,6 +29,7 @@ app.use('/api/habits', habitsRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/account-setting',accountsettting);
+app.use('/api/suggesthabit',suggestions);
 
 // Start the server
 const PORT = 5000;

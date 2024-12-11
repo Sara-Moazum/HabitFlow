@@ -10,8 +10,8 @@ const UpdateHabit = () => {
         habitName: '',
         description: '',
         frequency: '',
-        categoryId: '',
-        startDate: ''
+        categoryId: ''
+    
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -27,7 +27,7 @@ const UpdateHabit = () => {
                     description: habit.description || '',
                     frequency: habit.frequency || '',
                     categoryId: habit.categoryId || '',
-                    startDate: habit.startDate || ''
+                    
                 });
                 setLoading(false);
             } catch (err) {
@@ -122,16 +122,7 @@ const UpdateHabit = () => {
                         ></textarea>
                     </div>
 
-                    <div className="form-row">
-                        <label>Start Date:</label>
-                        <input
-                            type="date"
-                            name="startDate"
-                            value={formData.startDate}
-                            onChange={handleChange}
-                            style={{ width: '300px' }}
-                        />
-                    </div>
+                 
 
                     <div className="form-buttons">
                         <button type="submit" className="save-button">

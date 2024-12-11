@@ -3,6 +3,9 @@ import { Habit } from '../models/Habit.js';
 import { HabitProgress } from '../models/HabitProgress.js';
 import { Goal } from '../models/Goal.js';
 import { Sequelize } from 'sequelize';  // <-- Import Sequelize here
+import {UserInterest} from "../models/UserInterest.js";
+import {InterestHabit }from "../models/InterestHabit.js";
+import { DefaultHabit } from "../models/DefaultHabit.js";
 
 const router = express.Router();
 router.get('/:frequency', async (req, res) => {
@@ -239,7 +242,7 @@ router.get('/habitDetails/:habitId', async (req, res) => {
 // Update a habit
 router.put('/updatehabit/:habitId', async (req, res) => {
   const { habitId } = req.params;
-  const { habitName, description, frequency, categoryId,startDate } = req.body;
+  const { habitName, description, frequency, categoryId } = req.body;
 
   try {
     const habit = await Habit.findByPk(habitId);
@@ -252,7 +255,7 @@ router.put('/updatehabit/:habitId', async (req, res) => {
     habit.description = description || habit.description;
     habit.frequency = frequency || habit.frequency;
     habit.categoryId = categoryId || habit.categoryId;
-    habit.startDate = startDate || habit.startDate;
+   
 
 
     await habit.save();
@@ -328,6 +331,63 @@ router.get('/getGoal', async (req, res) => {
     return res.status(500).json({ message: 'Failed to fetch goal.' });
   }
 });
+
+/*router.get("/suggesthabit/:userId", async (req, res) => {
+  try {
+      const { userId } = req.params;
+
+      // Step 1: Get user's interests
+      const userInterests = await UserInterest.findAll({
+          where: { userId },
+          include: ["Interest"], // Adjust if aliases are used
+      });
+
+      const interestIds = userInterests.map((ui) => ui.interestId);
+
+      // Step 2: Fetch habits based on user's interests
+      const interestHabits = await InterestHabit.findAll({
+          where: { interestId: interestIds },
+      });
+
+      // Step 3: Fetch default habits for fixed categories
+      const fixedCategories = ["Hobbies", "Health & Fitness", "Productivity"];
+      const defaultHabits = await DefaultHabit.findAll({
+          include: ["Category"], // Ensure Category association is defined
+          where: {
+              "$Category.categoryName$": fixedCategories,
+          },
+      });
+
+      // Group habits by category
+      const categoryHabitMap = {};
+      fixedCategories.forEach((category) => {
+          categoryHabitMap[category] = [];
+      });
+
+      defaultHabits.forEach((habit) => {
+          const categoryName = habit.Category.categoryName;
+          if (categoryHabitMap[categoryName].length < 3) {
+              categoryHabitMap[categoryName].push(habit);
+          }
+      });
+
+      interestHabits.forEach((habit) => {
+          const categoryName = "Other"; // Default category for interest-based habits
+          if (!categoryHabitMap[categoryName]) {
+              categoryHabitMap[categoryName] = [];
+          }
+          categoryHabitMap[categoryName].push(habit);
+      });
+
+      res.json({ categoryHabits: categoryHabitMap });
+  } catch (error) {
+      console.error("Error fetching habit suggestions:", error);
+      res.status(500).json({ error: "Failed to fetch habit suggestions." });
+  }
+});
+*/
+
+
 
 export default router;
 
