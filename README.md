@@ -44,10 +44,11 @@ Each member contributed to different aspects of HabitFlow, from frontend design 
    git clone https://github.com/yourusername/habitflow.git
 2. Install dependencies:
 
-Copy code
+```bash
 cd habitflow
 npm install
 3. Run the app:
+```bash
 npm start
 4.Access HabitFlow at http://localhost:3000
 ## Usage
