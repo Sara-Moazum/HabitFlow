@@ -44,12 +44,14 @@ Each member contributed to different aspects of HabitFlow, from frontend design 
    git clone https://github.com/yourusername/habitflow.git
 2. Install dependencies:
 
-```bash
-cd habitflow
-npm install
+   cd habitflow
+   npm install
+
 3. Run the app:
-```bash
+
 npm start
-4.Access HabitFlow at http://localhost:3000
+
+4. Access HabitFlow at http://localhost:3000
+
 ## Usage
 Once the application is running, users can sign up or log in to manage and track their habits. Use the interactive dashboard to monitor your progress and view charts that visualize your consistency over time.
